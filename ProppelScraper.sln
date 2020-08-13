@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProppelScraper", "ProppelScraper\ProppelScraper.csproj", "{323705BB-1EAC-4E04-B540-E916650123D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0EB24086-F95E-4E66-9241-A3A3957ABC29} = {0EB24086-F95E-4E66-9241-A3A3957ABC29}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSACore", "..\CSACore\CSACore.csproj", "{0EB24086-F95E-4E66-9241-A3A3957ABC29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{323705BB-1EAC-4E04-B540-E916650123D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323705BB-1EAC-4E04-B540-E916650123D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323705BB-1EAC-4E04-B540-E916650123D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323705BB-1EAC-4E04-B540-E916650123D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EB24086-F95E-4E66-9241-A3A3957ABC29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EB24086-F95E-4E66-9241-A3A3957ABC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EB24086-F95E-4E66-9241-A3A3957ABC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EB24086-F95E-4E66-9241-A3A3957ABC29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {639337E4-C78F-401C-832E-7F0CE25FA91E}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+{
+  "SQLiteConnectionString": "Data Source=../../../Database/addresses.db",
+
+  "Mode": "properties/reports",
+  "ProxyIP": "130.61.95.193:3128",
+
+  "PropertyRanges": [
+    [ "vic", 0, 100 ]
+    //[ "vic", 9997, 10005 ]
+    //[ "vic", 9997, 19998 ],
+    //[ "nsw", 0, 100 ],
+    //[ "qld", 0, 100 ],
+    //[ "nt", 0, 100 ],
+    //[ "sa", 0, 100 ],
+    //[ "wa", 0, 100 ],
+    //[ "tas", 0, 100 ]
+  ],
+
+  "ReportRanges": [
+    [ "vic", 0, 100 ],
+    [ "nsw", 0, 100 ],
+    [ "qld", 0, 100 ],
+    [ "nt", 0, 100 ],
+    [ "sa", 0, 100 ],
+    [ "wa", 0, 100 ],
+    [ "tas", 0, 100 ]
+  ]
+}
