@@ -21,11 +21,6 @@ namespace ProppelScraper {
         //================================================================================
         //--------------------------------------------------------------------------------
         static void Main(string[] args) {
-            //sql mini portable
-            //distinguish page not found from property not found
-            //add image url scraping (use single scrape for testing - do this for page not found distinguishing too)
-
-
             // Initialise - CSA
             try {
                 CSA.Initialise(CONFIGURATION_PATH);
@@ -48,7 +43,6 @@ namespace ProppelScraper {
             // Initialise database
             InitialiseDatabase(connectionString);
 
-
             /*PropertyScraper scraper = new PropertyScraper(connectionString, "vic");
             AddressData address = scraper.ScrapeAddress(764999);
             Console.WriteLine(address);*/
@@ -62,7 +56,6 @@ namespace ProppelScraper {
             /*ReportScraper scraper = new ReportScraper(connectionString, "vic");
             AddressData address = scraper.ScrapeAddress(2910325); // 10000, 2910325, 3000000
             Console.WriteLine(address);*/
-
 
             // Scrape
             if (mode.Contains("reports")) {
