@@ -27,15 +27,19 @@ namespace ProppelScraper.Scraping {
 
         private HtmlWeb                         mWeb = new HtmlWeb();
         private string                          mProxyIP;
+        private string                          mProxyUsername;
+        private string                          mProxyPassword;
         private int                             mDownloadAttempts;
 
 
         //================================================================================
         //--------------------------------------------------------------------------------
-        public Scraper(string connectionString, string proxyIP) {
+        public Scraper(string connectionString, string proxyIP, string proxyUsername, string proxyPassword) {
             // Input
             mConnectionString = connectionString;
             mProxyIP = proxyIP;
+            mProxyUsername = proxyUsername;
+            mProxyPassword = proxyPassword;
 
             // Timeout
             mWeb.PreRequest = delegate(HttpWebRequest webRequest) {
@@ -60,7 +64,8 @@ namespace ProppelScraper.Scraping {
             while (true) {
                 try {
                     WebProxy proxy = (!string.IsNullOrWhiteSpace(mProxyIP) ? new WebProxy(mProxyIP) : null);
-                    HtmlDocument document = (proxy != null ? Web.Load(url, "GET", proxy, new NetworkCredential()) : Web.Load(url));
+                    NetworkCredential credentials = new NetworkCredential(mProxyUsername, mProxyPassword);
+                    HtmlDocument document = (proxy != null ? Web.Load(url, "GET", proxy, credentials) : Web.Load(url));
                     if ((int)Web.StatusCode < 200 || (int)Web.StatusCode >= 300)
                         throw new WebException($"Failed to download (Status {(int)Web.StatusCode}, {Web.StatusCode})");
                     return document;

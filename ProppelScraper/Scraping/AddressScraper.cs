@@ -18,7 +18,8 @@ namespace ProppelScraper.Scraping {
 
         //================================================================================
         //--------------------------------------------------------------------------------
-        public AddressScraper(string connectionString, string proxyIP, string url, string state, int minimumID, int maximumID) : base(connectionString, proxyIP) {
+        public AddressScraper(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string url, string state, int minimumID, int maximumID) :
+        base(connectionString, proxyIP, proxyUsername, proxyPassword) {
             mURL = url;
             mState = state;
             mMinimumID = minimumID;
