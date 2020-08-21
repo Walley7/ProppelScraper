@@ -1,10 +1,14 @@
 ﻿using CSACore.Core;
 using CSACore.Utility;
+using HtmlAgilityPack;
 using ProppelScraper.Scraping;
+using ScrapySharp.Network;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
