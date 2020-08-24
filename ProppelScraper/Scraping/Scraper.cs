@@ -43,8 +43,8 @@ namespace ProppelScraper.Scraping {
 
             // Timeout
             mWeb.PreRequest = delegate(HttpWebRequest webRequest) {
-                 webRequest.Timeout = DOWNLOAD_TIMEOUT;
-                 return true;
+                webRequest.Timeout = DOWNLOAD_TIMEOUT;
+                return true;
             };
         }
 

@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   //"SQLiteConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
   "SQLiteConnectionString": "Data Source=D:/Proppel/Data/Databases/addresses_test.db",
+=======
+  "SQLiteConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
+  //"SQLiteConnectionString": "Data Source=addresses.db",
+>>>>>>> 892f03ec0786a3031a02511ef0990ca704608f6b
 
   "Mode": "properties",
   "ProxyIP": "gate.dc.smartproxy.com:20000",
@@ -28,6 +33,10 @@
     [ "vic", 650, 700 ],
     [ "vic", 700, 750 ],
     [ "vic", 750, 800 ]
+<<<<<<< HEAD
+=======
+
+>>>>>>> 892f03ec0786a3031a02511ef0990ca704608f6b
     //[ "nsw", 0, 100 ],
     //[ "qld", 0, 100 ],
     //[ "nt", 0, 100 ],
