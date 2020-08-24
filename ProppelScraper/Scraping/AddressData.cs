@@ -221,21 +221,31 @@ namespace ProppelScraper.Scraping {
                 // ID
                 command = new SQLiteCommand("select id from AddressSchool where address_id = @ID and school_id = @SchoolID", connection);
                 command.Parameters.AddWithValue("@ID", id);
-                command.Parameters.AddWithValue("@SchoolID", id);
+                command.Parameters.AddWithValue("@SchoolID", s.id);
                 object schoolID = command.ExecuteScalar();
                 command.Dispose();
 
                 // Query
                 if (schoolID == null) {
-                    //Console.WriteLine("New school");
+                    command = new SQLiteCommand("insert into AddressSchool (address_id, school_id, type, rank, distance, url) " +
+                                                "values (@ID, @SchoolID, @Type, @Rank, @Distance, @URL)", connection);
                 }
                 else {
-                    //Console.WriteLine("Old school");
+                    command = new SQLiteCommand("update AddressSchool set address_id = @ID, school_id = @SchoolID, type = @Type, rank = @Rank, distance = @Distance, url = @URL " +
+                                                "where address_id = @ID and school_id = @SchoolID", connection);
                 }
 
                 // Parameters
+                command.Parameters.AddWithValue("@ID", id);
+                command.Parameters.AddWithValue("@SchoolID", s.id);
+                command.Parameters.AddWithValue("@Type", s.type);
+                command.Parameters.AddWithValue("@Rank", s.rank);
+                command.Parameters.AddWithValue("@Distance", s.distance);
+                command.Parameters.AddWithValue("@URL", s.url);
 
                 // Execute
+                command.ExecuteNonQuery();
+                command.Dispose();
             }
 
             // Return
@@ -273,6 +283,7 @@ namespace ProppelScraper.Scraping {
 
             for (int i = 0; i < schools.Count; ++i) {
                 builder.AppendLine($"School {i + 1}:               {schools[i].name}");
+                builder.AppendLine($"School {i + 1} - ID:          {schools[i].id}");
                 builder.AppendLine($"School {i + 1} - Type:        {schools[i].type}");
                 builder.AppendLine($"School {i + 1} - Rank:        {schools[i].rank}");
                 builder.AppendLine($"School {i + 1} - Distance:    {schools[i].distance}");
@@ -286,11 +297,24 @@ namespace ProppelScraper.Scraping {
         //================================================================================
         //********************************************************************************
         public class SchoolData {
+            public string id;
             public string name;
             public string type;
             public string rank;
             public string distance;
             public string url;
+
+            public bool CaptureID() {
+                int startIndex = url.IndexOf("?id=");
+                if (startIndex == -1)
+                    return false;
+                startIndex += 4;
+                int endIndex = url.IndexOf("&", startIndex);
+                if (endIndex == -1)
+                    endIndex = url.Length;
+                id = url.Substring(startIndex, endIndex - startIndex);
+                return true;
+            }
         }
     }
 

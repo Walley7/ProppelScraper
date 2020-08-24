@@ -56,22 +56,31 @@ namespace ProppelScraper.Scraping {
                 address.soldOn = scraper.ReadPastAndTo("</b> in ", "&nbsp;<a href=");
 
                 if (scraper.ReadPastCheck("<td><b>Rent</b>")) {
-                    address.rent = scraper.ReadPastAndTo("target=\"_blank\">", " in ");
-                    address.rentOn = scraper.ReadPastAndTo(" in ", "</a></td>");
+                    //address.rent = scraper.ReadPastAndTo("target=\"_blank\">", " in ");
+                    address.rent = scraper.ReadToAndTo("$", " in ");
+                    //address.rentOn = scraper.ReadPastAndTo(" in ", "</a></td>");
+                    address.rentOn = scraper.ReadPastAndTo(" in ", "</td>").Replace("</a>", "");
                 }
-
-                if (scraper.ReadToCheck("<td><b>Unit:</b> ") || scraper.ReadToCheck("<td><b>House:</b> ") || scraper.ReadToCheck("<td><b>Townhouse:</b></td>")) {
+                
+                if (scraper.ReadToCheck("<td><b>House:</b> ") || scraper.ReadToCheck("<td><b>Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Unit:</b> ") || scraper.ReadToCheck("<td><b>Apartment:</b> ") ||
+                    scraper.ReadToCheck("<td><b>Villa:</b> ") || scraper.ReadToCheck("<td><b>Residential land:</b> ") || scraper.ReadToCheck("<td><b>Do Not Import:</b> ") || scraper.ReadToCheck("<td><b>Other:</b> ") ||
+                    scraper.ReadToCheck("<td><b>Other Residential:</b> "))
+                {
                     address.type = scraper.ReadPastAndTo("<td><b>", ":</b>");
                     scraper.ReadPast(":</b> ");
                     address.bedrooms = scraper.ReadToAndSkip(" <img src=\"/img/bed.png\" border=\"0\" alt=\"Bed rooms\" title=\"Bed rooms\"> ");
                     address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ");
                     address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">");
                 }
+                else if (scraper.ReadToCheck("<td><b>Commercial Property</b>"))
+                    address.type = "Commercial Property";
                 else if (scraper.ReadToCheck("<td><b>Land:</b>"))
                     address.type = "Land";
-
-                address.landSize = scraper.ReadPastAndToOrTo("<td><b>Land size:</b> ", " | <b>Building size:</b>", "&nbsp;<a href=\"measure.php");
-                address.buildingSize = scraper.ReadPastAndTo("Building size:</b> ", "&nbsp;<a href=\"measure.php");
+                
+                //address.landSize = scraper.ReadPastAndToOrTo("<td><b>Land size:</b> ", " | <b>Building size:</b>", "&nbsp;<a href=\"measure.php");
+                address.landSize = scraper.ReadPastAndPast("<td><b>Land size:</b> ", " sqm");
+                //address.buildingSize = scraper.ReadPastAndTo("Building size:</b> ", "&nbsp;<a href=\"measure.php");
+                address.buildingSize = scraper.ReadPastAndPast("<b>Building size:</b> ", " sqm");
 
                 address.buildYear = scraper.ReadPastAndTo("<td><b>Build year:</b> ", "</td>");
                 address.agent = scraper.ReadPastAndTo("<td><b>Agent:</b> ", "</td>");
@@ -93,8 +102,10 @@ namespace ProppelScraper.Scraping {
 
                 address.propertyZoneURL = scraper.ReadToAndTo("http://www.showneighbour.com/propertyzone.php?", "\" target=\"_blank\">Property's zone");
 
-                address.estimatedLowerValue = scraper.ReadPastAndTo("target=\"_blank\">Estimate ", " - ");
-                address.estimatedUpperValue = scraper.ReadPastAndTo(" - ", ", view property report</a></td>");
+                if (scraper.ReadToCheck("target=\"_blank\">Estimate ")) {
+                    address.estimatedLowerValue = scraper.ReadPastAndTo("target=\"_blank\">Estimate ", " - ");
+                    address.estimatedUpperValue = scraper.ReadPastAndTo(" - ", ", view property report</a></td>");
+                }
 
                 // Schools section
                 if (scraper.ReadPastCheck("<td><b>Nearby Schools:</b></td>")) {
@@ -102,6 +113,7 @@ namespace ProppelScraper.Scraping {
                         AddressData.SchoolData school = new AddressData.SchoolData();
                         address.schools.Add(school);
                         school.url = "http://house.speakingsame.com/" + scraper.ReadPastAndTo("\"", "\">");
+                        school.CaptureID();
                         school.name = scraper.ReadPastAndTo("\">", "</a></td>");
                         school.type = scraper.ReadPastAndTo("<td>", "</td>");
                         school.rank = scraper.ReadPastAndTo("<td class=\"sm\">", "</td>");

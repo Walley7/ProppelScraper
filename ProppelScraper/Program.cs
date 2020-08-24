@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ProppelScraper {
 
-    class Program {
+    class MyHomePage {
         //================================================================================
         public const string                     CONFIGURATION_PATH = "ProppelScraper.json";
         public const string                     LOG_PATH = "Log.log";
@@ -21,6 +21,8 @@ namespace ProppelScraper {
         //================================================================================
         //--------------------------------------------------------------------------------
         static void Main(string[] args) {
+            //select id, status, type from Address where status <> 'not address' and type is null and bedrooms is null limit 5;
+
             // Initialise - CSA
             try {
                 CSA.Initialise(CONFIGURATION_PATH);
@@ -43,15 +45,16 @@ namespace ProppelScraper {
             // Initialise database
             InitialiseDatabase(connectionString);
 
-            /*PropertyScraper scraper = new PropertyScraper(connectionString, "vic");
-            AddressData address = scraper.ScrapeAddress(764999);
-            Console.WriteLine(address);*/
+            // Tests
+            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
+            AddressData address = scraper.ScrapeAddress(203);
+            Console.WriteLine(address);
+            return;*/
 
             /*SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Open();
             address.Save(connection);
             connection.Dispose();*/
-
 
             /*ReportScraper scraper = new ReportScraper(connectionString, "vic");
             AddressData address = scraper.ScrapeAddress(2910325); // 10000, 2910325, 3000000
