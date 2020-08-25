@@ -62,24 +62,33 @@ namespace ProppelScraper.Scraping {
                     address.rentOn = scraper.ReadPastAndTo(" in ", "</td>").Replace("</a>", "");
                 }
 
-                if (scraper.ReadToCheck("<td><b>House:</b> ") || scraper.ReadToCheck("<td><b>Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Unit:</b> ") || scraper.ReadToCheck("<td><b>Apartment:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Villa:</b> ") || scraper.ReadToCheck("<td><b>Rural:</b> ") || scraper.ReadToCheck("<td><b>Studio:</b> ") || scraper.ReadToCheck("<td><b>Unitblock:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Rural:</b> ") || scraper.ReadToCheck("<td><b>Terrace:</b> ") || scraper.ReadToCheck("<td><b>Acreage:</b> ") || scraper.ReadToCheck("<td><b>Industrial:</b> ") ||
-                    scraper.ReadToCheck("<td><b>House, Townhouse:</b> ") || scraper.ReadToCheck("<td><b>House,Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Duplex:</b> ") || scraper.ReadToCheck("<td><b>Residential land:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Do Not Import:</b> ") || scraper.ReadToCheck("<td><b>Other:</b> ") || scraper.ReadToCheck("<td><b>Warehouse:</b> ") || scraper.ReadToCheck("<td><b>Lifestyle:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Mixed Farming:</b> ") || scraper.ReadToCheck("<td><b>Dairy:</b> ") || scraper.ReadToCheck("<td><b>Retirement Living:</b> ") || scraper.ReadToCheck("<td><b>Farmlet:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Livestock:</b> ") || scraper.ReadToCheck("<td><b>Other Residential:</b> "))
-                {
-                    address.type = scraper.ReadPastAndTo("<td><b>", ":</b>");
-                    scraper.ReadPast(":</b> ");
-                    address.bedrooms = scraper.ReadToAndSkip(" <img src=\"/img/bed.png\" border=\"0\" alt=\"Bed rooms\" title=\"Bed rooms\"> ");
-                    address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ");
-                    address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">");
+                //if (scraper.ReadToCheck("<td><b>House:</b> ") || scraper.ReadToCheck("<td><b>Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Unit:</b> ") || scraper.ReadToCheck("<td><b>Apartment:</b> ") ||
+                //    scraper.ReadToCheck("<td><b>Villa:</b> ") || scraper.ReadToCheck("<td><b>Rural:</b> ") || scraper.ReadToCheck("<td><b>Studio:</b> ") || scraper.ReadToCheck("<td><b>Unitblock:</b> ") ||
+                //    scraper.ReadToCheck("<td><b>Rural:</b> ") || scraper.ReadToCheck("<td><b>Terrace:</b> ") || scraper.ReadToCheck("<td><b>Acreage:</b> ") || scraper.ReadToCheck("<td><b>Industrial:</b> ") ||
+                //    scraper.ReadToCheck("<td><b>House, Townhouse:</b> ") || scraper.ReadToCheck("<td><b>House,Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Duplex:</b> ") || scraper.ReadToCheck("<td><b>Residential land:</b> ") ||
+                //    scraper.ReadToCheck("<td><b>Do Not Import:</b> ") || scraper.ReadToCheck("<td><b>Other:</b> ") || scraper.ReadToCheck("<td><b>Warehouse:</b> ") || scraper.ReadToCheck("<td><b>Lifestyle:</b> ") ||
+                //    scraper.ReadToCheck("<td><b>Mixed Farming:</b> ") || scraper.ReadToCheck("<td><b>Dairy:</b> ") || scraper.ReadToCheck("<td><b>Retirement Living:</b> ") || scraper.ReadToCheck("<td><b>Farmlet:</b> ") ||
+                //    scraper.ReadToCheck("<td><b>Livestock:</b> ") || scraper.ReadToCheck("<td><b>Other Residential:</b> "))
+                //{
+                //    address.type = scraper.ReadPastAndTo("<td><b>", ":</b>");
+                //    scraper.ReadPast(":</b> ");
+                //    address.bedrooms = scraper.ReadToAndSkip(" <img src=\"/img/bed.png\" border=\"0\" alt=\"Bed rooms\" title=\"Bed rooms\"> ");
+                //    address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ");
+                //    address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">");
+                //}
+                //else if (scraper.ReadToCheck("<td><b>Commercial Property</b>"))
+                //    address.type = "Commercial Property";
+                //else if (scraper.ReadToCheck("<td><b>Land:</b>"))
+                //    address.type = "Land";
+
+                scraper.ReadPast("<td>");
+                if (scraper.RemainingString.StartsWith("<b>")) {
+                    address.type = scraper.ReadPastAndTo("<b>", "</b>").Replace(":", "");
+                    scraper.ReadPast("</b>");
                 }
-                else if (scraper.ReadToCheck("<td><b>Commercial Property</b>"))
-                    address.type = "Commercial Property";
-                else if (scraper.ReadToCheck("<td><b>Land:</b>"))
-                    address.type = "Land";
+                address.bedrooms = scraper.ReadToAndSkip(" <img src=\"/img/bed.png\" border=\"0\" alt=\"Bed rooms\" title=\"Bed rooms\"> ").Replace(" ", "");
+                address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ").Replace(" ", "");
+                address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">").Replace(" ", "");
                 
                 //address.landSize = scraper.ReadPastAndToOrTo("<td><b>Land size:</b> ", " | <b>Building size:</b>", "&nbsp;<a href=\"measure.php");
                 address.landSize = scraper.ReadPastAndPast("<td><b>Land size:</b> ", " sqm");
