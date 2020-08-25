@@ -61,10 +61,14 @@ namespace ProppelScraper.Scraping {
                     //address.rentOn = scraper.ReadPastAndTo(" in ", "</a></td>");
                     address.rentOn = scraper.ReadPastAndTo(" in ", "</td>").Replace("</a>", "");
                 }
-                
+
                 if (scraper.ReadToCheck("<td><b>House:</b> ") || scraper.ReadToCheck("<td><b>Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Unit:</b> ") || scraper.ReadToCheck("<td><b>Apartment:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Villa:</b> ") || scraper.ReadToCheck("<td><b>Residential land:</b> ") || scraper.ReadToCheck("<td><b>Do Not Import:</b> ") || scraper.ReadToCheck("<td><b>Other:</b> ") ||
-                    scraper.ReadToCheck("<td><b>Other Residential:</b> "))
+                    scraper.ReadToCheck("<td><b>Villa:</b> ") || scraper.ReadToCheck("<td><b>Rural:</b> ") || scraper.ReadToCheck("<td><b>Studio:</b> ") || scraper.ReadToCheck("<td><b>Unitblock:</b> ") ||
+                    scraper.ReadToCheck("<td><b>Rural:</b> ") || scraper.ReadToCheck("<td><b>Terrace:</b> ") || scraper.ReadToCheck("<td><b>Acreage:</b> ") || scraper.ReadToCheck("<td><b>Industrial:</b> ") ||
+                    scraper.ReadToCheck("<td><b>House, Townhouse:</b> ") || scraper.ReadToCheck("<td><b>House,Townhouse:</b> ") || scraper.ReadToCheck("<td><b>Duplex:</b> ") || scraper.ReadToCheck("<td><b>Residential land:</b> ") ||
+                    scraper.ReadToCheck("<td><b>Do Not Import:</b> ") || scraper.ReadToCheck("<td><b>Other:</b> ") || scraper.ReadToCheck("<td><b>Warehouse:</b> ") || scraper.ReadToCheck("<td><b>Lifestyle:</b> ") ||
+                    scraper.ReadToCheck("<td><b>Mixed Farming:</b> ") || scraper.ReadToCheck("<td><b>Dairy:</b> ") || scraper.ReadToCheck("<td><b>Retirement Living:</b> ") || scraper.ReadToCheck("<td><b>Farmlet:</b> ") ||
+                    scraper.ReadToCheck("<td><b>Livestock:</b> ") || scraper.ReadToCheck("<td><b>Other Residential:</b> "))
                 {
                     address.type = scraper.ReadPastAndTo("<td><b>", ":</b>");
                     scraper.ReadPast(":</b> ");

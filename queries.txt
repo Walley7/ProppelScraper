@@ -1,0 +1,1 @@
+select id, status, type from Address where status <> 'not address' and type is null and bedrooms is null limit 5;

@@ -25,8 +25,6 @@ namespace ProppelScraper {
         //================================================================================
         //--------------------------------------------------------------------------------
         static void Main(string[] args) {
-            //select id, status, type from Address where status <> 'not address' and type is null and bedrooms is null limit 5;
-
             // Initialise - CSA
             try {
                 CSA.Initialise(CONFIGURATION_PATH);
@@ -51,7 +49,7 @@ namespace ProppelScraper {
 
             // Tests
             /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(203);
+            AddressData address = scraper.ScrapeAddress(4619);
             Console.WriteLine(address);
             return;*/
 
@@ -61,7 +59,7 @@ namespace ProppelScraper {
             connection.Dispose();*/
 
             /*ReportScraper scraper = new ReportScraper(connectionString, "vic");
-            AddressData address = scraper.ScrapeAddress(2910325); // 10000, 2910325, 3000000
+            AddressData address = scraper.ScrapeAddress(4619); // 10000, 2910325, 3000000
             Console.WriteLine(address);*/
 
             // Scrape
