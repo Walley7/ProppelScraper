@@ -66,12 +66,16 @@ namespace ProppelScraper.Scraping {
                     scraper.ReadPast("</b>");
                 }
                 address.bedrooms = scraper.ReadToAndSkip(" <img src=\"/img/bed.png\" border=\"0\" alt=\"Bed rooms\" title=\"Bed rooms\"> ").Replace(" ", "").Replace("</td>", "").Replace("<td>", "");
-                address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ").Replace(" ", "");
-                address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">").Replace(" ", "");
+                address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ").Replace(" ", "").Replace("</td>", "").Replace("<td>", "");
+                address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">").Replace(" ", "").Replace("</td>", "").Replace("<td>", "");
 
                 address.landSize = scraper.ReadPastAndTo("<td><b>Land size:</b></td><td>", "&nbsp;<a href=\"measure.php");
-                address.soldFor = scraper.ReadPastAndTo("title=\"Click to view more about property sales information\">", " in ");
-                address.soldOn = scraper.ReadPastAndTo(" in ", "</a></td></tr>");
+
+                if (scraper.ReadPastCheck("title=\"Click to view more about property sales information\">")) {
+                    address.soldFor = scraper.ReadTo(" in ");
+                    address.soldOn = scraper.ReadPastAndTo(" in ", "</a></td></tr>");
+                }
+
                 address.estimatedLowerValue = scraper.ReadPastAndTo("<tr><td><b>Estimate:</b></td><td>", " - ");
                 address.estimatedUpperValue = scraper.ReadPastAndTo(" - ", "</td></tr>");
                 address.buildYear = scraper.ReadPastAndTo("<td><b>Build year:</b></td><td>", "</td></tr>");

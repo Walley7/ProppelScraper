@@ -52,8 +52,11 @@ namespace ProppelScraper.Scraping {
 
                 // Property section (upper)
                 address.address = scraper.ReadPastAndTo("<span class=\"addr\">", "</span></td>");
-                address.soldFor = scraper.ReadPastAndTo("<td><b>Sold ", "</b>");
-                address.soldOn = scraper.ReadPastAndTo("</b> in ", "&nbsp;<a href=");
+
+                if (scraper.ReadPastCheck("<td><b>Sold ")) {
+                    address.soldFor = scraper.ReadTo("</b>");
+                    address.soldOn = scraper.ReadPastAndTo("</b> in ", "&nbsp;<a href=");
+                }
 
                 if (scraper.ReadPastCheck("<td><b>Rent</b>")) {
                     //address.rent = scraper.ReadPastAndTo("target=\"_blank\">", " in ");
