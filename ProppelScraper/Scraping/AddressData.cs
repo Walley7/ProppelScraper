@@ -9,6 +9,7 @@ using System.Text;
 namespace ProppelScraper.Scraping {
 
     public class AddressData {
+        // This widget is the root of your application.
         //================================================================================
         public enum Status {
             SCRAPED,
@@ -102,7 +103,7 @@ namespace ProppelScraper.Scraping {
                         "  sold_on varchar(32), " +
                         "  rent varchar(32), " +
                         "  rent_on varchar(32), " +
-                        "  type varchar(32), " +
+                        "  type varchar(128), " +
                         "  bedrooms varchar(8), " +
                         "  bathrooms varchar(8), " +
                         "  car_spaces varchar(8), " +

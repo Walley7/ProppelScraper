@@ -48,8 +48,8 @@ namespace ProppelScraper {
             InitialiseDatabase(connectionString);
 
             // Tests
-            /*ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(50001);
+            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
+            AddressData address = scraper.ScrapeAddress(450000);
             Console.WriteLine(address);
             return;*/
 
