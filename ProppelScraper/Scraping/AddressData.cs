@@ -95,7 +95,7 @@ namespace ProppelScraper.Scraping {
                     // Query
                     SQLiteCommand tableCommand = new SQLiteCommand(
                         "create table Address (" +
-                        "  id varchar(32) primary key, " +
+                        "  id varchar(32)" + (Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? " primary key" : "") + ", " +
                         "  source varchar(32), " +
                         "  status varchar(32), " +
                         "  address varchar(256), " +
@@ -137,7 +137,7 @@ namespace ProppelScraper.Scraping {
                     // Query
                     SQLiteCommand tableCommand = new SQLiteCommand(
                         "create table AddressSchool (" +
-                        "  id integer primary key, " +
+                        "  id integer" + (Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? " primary key" : "") + ", " +
                         "  address_id varchar(32) references Address(id), " +
                         "  school_id varchar(32), " +
                         "  type varchar(32), " +
@@ -161,7 +161,7 @@ namespace ProppelScraper.Scraping {
             // Address - ID
             SQLiteCommand command = new SQLiteCommand("select id from Address where id = @ID", connection);
             command.Parameters.AddWithValue("@ID", id);
-            object addressID = command.ExecuteScalar();
+            object addressID = Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? command.ExecuteScalar() : null;
             command.Dispose();
 
             // Address - query
@@ -223,7 +223,7 @@ namespace ProppelScraper.Scraping {
                 command = new SQLiteCommand("select id from AddressSchool where address_id = @ID and school_id = @SchoolID", connection);
                 command.Parameters.AddWithValue("@ID", id);
                 command.Parameters.AddWithValue("@SchoolID", s.id);
-                object schoolID = command.ExecuteScalar();
+                object schoolID = Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? command.ExecuteScalar() : null;
                 command.Dispose();
 
                 // Query

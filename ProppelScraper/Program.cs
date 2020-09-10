@@ -16,10 +16,20 @@ using System.Threading.Tasks;
 
 namespace ProppelScraper {
 
-    class MyHomePage {
+    class Program {
         //================================================================================
         public const string                     CONFIGURATION_PATH = "ProppelScraper.json";
         public const string                     LOG_PATH = "Log.log";
+
+        //--------------------------------------------------------------------------------
+        public enum EDatabaseMode {
+            INDEXED,
+            UNINDEXED
+        }
+
+
+        //================================================================================
+        private static EDatabaseMode            sDatabaseMode;
 
 
         //================================================================================
@@ -38,6 +48,7 @@ namespace ProppelScraper {
             // Configuration
             string connectionString = CSA.Setting("SQLiteConnectionString");
             string mode = CSA.Setting("Mode");
+            sDatabaseMode = (CSA.Setting("DatabaseMode") == "indexed" ? EDatabaseMode.INDEXED : EDatabaseMode.UNINDEXED);
             string proxyIP = CSA.Setting("ProxyIP", false);
             string proxyUsername = CSA.Setting("ProxyUsername", false);
             string proxyPassword = CSA.Setting("ProxyPassword", false);
@@ -92,6 +103,9 @@ namespace ProppelScraper {
             // Close
             connection.Dispose();
         }
+
+        //--------------------------------------------------------------------------------
+        public static EDatabaseMode DatabaseMode { get => sDatabaseMode; }
 
 
         // SCRAPING ================================================================================
