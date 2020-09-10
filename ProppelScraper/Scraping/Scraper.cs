@@ -95,6 +95,11 @@ namespace ProppelScraper.Scraping {
             mConnection = new SQLiteConnection(mConnectionString);
             mConnection.Open();
             LogInfo($"Connected to database.");
+
+            // Configuration
+            SQLiteCommand command = new SQLiteCommand("PRAGMA journal_mode=WAL;", mConnection);
+            command.ExecuteNonQuery();
+            command.Dispose();
         }
         
         //--------------------------------------------------------------------------------
