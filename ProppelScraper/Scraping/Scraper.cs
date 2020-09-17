@@ -97,11 +97,11 @@ namespace ProppelScraper.Scraping {
             LogInfo($"Connected to database.");
 
             // Configuration
-            if (Program.DatabaseMode == Program.EDatabaseMode.INDEXED) {
+            //if (Program.DatabaseMode == Program.EDatabaseMode.INDEXED) {
                 SQLiteCommand command = new SQLiteCommand("PRAGMA journal_mode=WAL;", mConnection);
                 command.ExecuteNonQuery();
                 command.Dispose();
-            }
+            //}
         }
         
         //--------------------------------------------------------------------------------
