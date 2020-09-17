@@ -103,8 +103,11 @@ namespace ProppelScraper.Scraping {
                 address.propertyZoneURL = scraper.ReadToAndTo("http://www.showneighbour.com/propertyzone.php?", "\" target=\"_blank\">Property's zone");
 
                 if (scraper.ReadToCheck("target=\"_blank\">Estimate ")) {
-                    address.estimatedLowerValue = scraper.ReadPastAndTo("target=\"_blank\">Estimate ", " - ");
-                    address.estimatedUpperValue = scraper.ReadPastAndTo(" - ", ", view property report</a></td>");
+                    string[] estimatedValues = scraper.ReadPastAndTo("target=\"_blank\">Estimate ", ", view property report</a></td>").Split(" - ", StringSplitOptions.RemoveEmptyEntries);
+                    if (estimatedValues.Length > 0)
+                        address.estimatedLowerValue = estimatedValues[0];
+                    if (estimatedValues.Length > 1)
+                        address.estimatedUpperValue = estimatedValues[1];
                 }
 
                 // Schools section

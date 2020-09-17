@@ -1,6 +1,8 @@
 ﻿using CSACore.Core;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Text;
 
@@ -88,14 +90,16 @@ namespace ProppelScraper.Scraping {
 
         // DATABASE ================================================================================
         //--------------------------------------------------------------------------------
-        public static void InitialiseDatabase(SQLiteConnection connection) {
+        public static void InitialiseDatabase(DbConnection connection) {
             // Address table
-            using (SQLiteCommand command = new SQLiteCommand("select name from sqlite_master where type = 'table' and name = 'Address'", connection)) {
+            using (DbCommand command = CreateCommand($"select table_name from information_schema.tables where table_schema = '{connection.Database}' and table_name = 'Address'",
+                                                     "select name from sqlite_master where type = 'table' and name = 'Address'", connection))
+            {
                 if (command.ExecuteScalar() == null) {
                     // Query
-                    SQLiteCommand tableCommand = new SQLiteCommand(
+                    DbCommand tableCommand = CreateCommand(
                         "create table Address (" +
-                        "  id varchar(32)" + (Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? " primary key" : "") + ", " +
+                        "  id varchar(32)" + (Program.DatabaseIsMySQL ? " not null" : "") + " primary key, " +
                         "  source varchar(32), " +
                         "  status varchar(32), " +
                         "  address varchar(256), " +
@@ -132,17 +136,19 @@ namespace ProppelScraper.Scraping {
                 }
             }
 
-            using (SQLiteCommand command = new SQLiteCommand("select name from sqlite_master where type = 'table' and name = 'AddressSchool'", connection)) {
+            using (DbCommand command = CreateCommand($"select table_name from information_schema.tables where table_schema = '{connection.Database}' and table_name = 'AddressSchool'",
+                                                     "select name from sqlite_master where type = 'table' and name = 'AddressSchool'", connection))
+            {
                 if (command.ExecuteScalar() == null) {
                     // Query
-                    SQLiteCommand tableCommand = new SQLiteCommand(
+                    DbCommand tableCommand = CreateCommand(
                         "create table AddressSchool (" +
-                        "  id integer" + (Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? " primary key" : "") + ", " +
+                        "  id integer" + (Program.DatabaseIsMySQL ? " not null auto_increment" : "") + " primary key, " +
                         "  address_id varchar(32) references Address(id), " +
                         "  school_id varchar(32), " +
                         "  type varchar(32), " +
                         "  rank varchar(32), " +
-                        "  distance varchar(8), " +
+                        "  distance varchar(128), " +
                         "  url varchar(256) " +
                         ");",
                         connection    
@@ -157,61 +163,61 @@ namespace ProppelScraper.Scraping {
         }
 
         //--------------------------------------------------------------------------------
-        public bool Save(SQLiteConnection connection) {
+        public bool Save(DbConnection connection) {
             // Address - ID
-            SQLiteCommand command = new SQLiteCommand("select id from Address where id = @ID", connection);
-            command.Parameters.AddWithValue("@ID", id);
-            object addressID = Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? command.ExecuteScalar() : null;
+            DbCommand command = CreateCommand("select id from Address where id = @ID", connection);
+            AddParameter(command, "@ID", id);
+            object addressID = command.ExecuteScalar();
             command.Dispose();
 
             // Address - query
             if (addressID == null) {
-                command = new SQLiteCommand("insert into Address (id, source, status, address, sold_for, sold_on, rent, rent_on, type, bedrooms, bathrooms, car_spaces, " +
-                                            "  land_size, building_size, build_year, agent, distances, thumbnail_url, images_url, neighbour_images_url, floor_plan_url, " +
-                                            "  lot, plan_number, property_zone_url, estimated_lower_value, estimated_upper_value) " +
-                                            "values (@ID, @Source, @Status, @Address, @SoldFor, @SoldOn, @Rent, @RentOn, @Type, @Bedrooms, @Bathrooms, @CarSpaces, " +
-                                            "        @LandSize, @BuildingSize, @BuildYear, @Agent, @Distances, @ThumbnailURL, @ImagesURL, @NeighbourImagesURL, " +
-                                            "        @FloorPlanURL, @Lot, @PlanNumber, @PropertyZoneURL, @EstimatedLowerValue, @EstimatedUpperValue)",
-                                            connection);
+                command = CreateCommand("insert into Address (id, source, status, address, sold_for, sold_on, rent, rent_on, type, bedrooms, bathrooms, car_spaces, " +
+                                        "  land_size, building_size, build_year, agent, distances, thumbnail_url, images_url, neighbour_images_url, floor_plan_url, " +
+                                        "  lot, plan_number, property_zone_url, estimated_lower_value, estimated_upper_value) " +
+                                        "values (@ID, @Source, @Status, @Address, @SoldFor, @SoldOn, @Rent, @RentOn, @Type, @Bedrooms, @Bathrooms, @CarSpaces, " +
+                                        "        @LandSize, @BuildingSize, @BuildYear, @Agent, @Distances, @ThumbnailURL, @ImagesURL, @NeighbourImagesURL, " +
+                                        "        @FloorPlanURL, @Lot, @PlanNumber, @PropertyZoneURL, @EstimatedLowerValue, @EstimatedUpperValue)",
+                                        connection);
             }
             else {
-                command = new SQLiteCommand("update Address set source = @Source, status = @Status, address = @Address, sold_for = @SoldFor, sold_on = @SoldOn, rent = @Rent, " +
-                                            "  rent_on = @RentOn, type = @Type, bedrooms = @Bedrooms, bathrooms = @Bathrooms, car_spaces = @CarSpaces, " +
-                                            "  land_size = @LandSize, building_size = @BuildingSize, build_year = @BuildYear, agent = @Agent, distances = @Distances, " +
-                                            "  thumbnail_url = @ThumbnailURL, images_url = @ImagesURL, neighbour_images_url = @NeighbourImagesURL, " +
-                                            "  floor_plan_url = @FloorPlanURL, lot = @Lot, plan_number = @PlanNumber, property_zone_url = @PropertyZoneURL, " +
-                                            "  estimated_lower_value = @EstimatedLowerValue, estimated_upper_value = @EstimatedUpperValue " +
-                                            "where id = @ID",
-                                            connection);
+                command = CreateCommand("update Address set source = @Source, status = @Status, address = @Address, sold_for = @SoldFor, sold_on = @SoldOn, rent = @Rent, " +
+                                        "  rent_on = @RentOn, type = @Type, bedrooms = @Bedrooms, bathrooms = @Bathrooms, car_spaces = @CarSpaces, " +
+                                        "  land_size = @LandSize, building_size = @BuildingSize, build_year = @BuildYear, agent = @Agent, distances = @Distances, " +
+                                        "  thumbnail_url = @ThumbnailURL, images_url = @ImagesURL, neighbour_images_url = @NeighbourImagesURL, " +
+                                        "  floor_plan_url = @FloorPlanURL, lot = @Lot, plan_number = @PlanNumber, property_zone_url = @PropertyZoneURL, " +
+                                        "  estimated_lower_value = @EstimatedLowerValue, estimated_upper_value = @EstimatedUpperValue " +
+                                        "where id = @ID",
+                                        connection);
             }
 
             // Address - parameters
-            command.Parameters.AddWithValue("@ID", id);
-            command.Parameters.AddWithValue("@Source", source);
-            command.Parameters.AddWithValue("@Status", StatusString);
-            command.Parameters.AddWithValue("@Address", address);
-            command.Parameters.AddWithValue("@SoldFor", soldFor);
-            command.Parameters.AddWithValue("@SoldOn", soldOn);
-            command.Parameters.AddWithValue("@Rent", rent);
-            command.Parameters.AddWithValue("@RentOn", rentOn);
-            command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@Bedrooms", bedrooms);
-            command.Parameters.AddWithValue("@Bathrooms", bathrooms);
-            command.Parameters.AddWithValue("@CarSpaces", carSpaces);
-            command.Parameters.AddWithValue("@LandSize", landSize);
-            command.Parameters.AddWithValue("@BuildingSize", buildingSize);
-            command.Parameters.AddWithValue("@BuildYear", buildYear);
-            command.Parameters.AddWithValue("@Agent", agent);
-            command.Parameters.AddWithValue("@Distances", distances);
-            command.Parameters.AddWithValue("@ThumbnailURL", thumbnailURL);
-            command.Parameters.AddWithValue("@ImagesURL", imagesURL);
-            command.Parameters.AddWithValue("@NeighbourImagesURL", neighbourImagesURL);
-            command.Parameters.AddWithValue("@FloorPlanURL", floorPlanURL);
-            command.Parameters.AddWithValue("@Lot", lot);
-            command.Parameters.AddWithValue("@PlanNumber", planNumber);
-            command.Parameters.AddWithValue("@PropertyZoneURL", propertyZoneURL);
-            command.Parameters.AddWithValue("@EstimatedLowerValue", estimatedLowerValue);
-            command.Parameters.AddWithValue("@EstimatedUpperValue", estimatedUpperValue);
+            AddParameter(command, "@ID", id);
+            AddParameter(command, "@Source", source);
+            AddParameter(command, "@Status", StatusString);
+            AddParameter(command, "@Address", address);
+            AddParameter(command, "@SoldFor", soldFor);
+            AddParameter(command, "@SoldOn", soldOn);
+            AddParameter(command, "@Rent", rent);
+            AddParameter(command, "@RentOn", rentOn);
+            AddParameter(command, "@Type", type);
+            AddParameter(command, "@Bedrooms", bedrooms);
+            AddParameter(command, "@Bathrooms", bathrooms);
+            AddParameter(command, "@CarSpaces", carSpaces);
+            AddParameter(command, "@LandSize", landSize);
+            AddParameter(command, "@BuildingSize", buildingSize);
+            AddParameter(command, "@BuildYear", buildYear);
+            AddParameter(command, "@Agent", agent);
+            AddParameter(command, "@Distances", distances);
+            AddParameter(command, "@ThumbnailURL", thumbnailURL);
+            AddParameter(command, "@ImagesURL", imagesURL);
+            AddParameter(command, "@NeighbourImagesURL", neighbourImagesURL);
+            AddParameter(command, "@FloorPlanURL", floorPlanURL);
+            AddParameter(command, "@Lot", lot);
+            AddParameter(command, "@PlanNumber", planNumber);
+            AddParameter(command, "@PropertyZoneURL", propertyZoneURL);
+            AddParameter(command, "@EstimatedLowerValue", estimatedLowerValue);
+            AddParameter(command, "@EstimatedUpperValue", estimatedUpperValue);
 
             // Address - execute
             command.ExecuteNonQuery();
@@ -220,29 +226,29 @@ namespace ProppelScraper.Scraping {
             // Schools
             foreach (SchoolData s in schools) {
                 // ID
-                command = new SQLiteCommand("select id from AddressSchool where address_id = @ID and school_id = @SchoolID", connection);
-                command.Parameters.AddWithValue("@ID", id);
-                command.Parameters.AddWithValue("@SchoolID", s.id);
-                object schoolID = Program.DatabaseMode == Program.EDatabaseMode.INDEXED ? command.ExecuteScalar() : null;
+                command = CreateCommand("select id from AddressSchool where address_id = @ID and school_id = @SchoolID", connection);
+                AddParameter(command, "@ID", id);
+                AddParameter(command, "@SchoolID", s.id);
+                object schoolID = command.ExecuteScalar();
                 command.Dispose();
 
                 // Query
                 if (schoolID == null) {
-                    command = new SQLiteCommand("insert into AddressSchool (address_id, school_id, type, rank, distance, url) " +
-                                                "values (@ID, @SchoolID, @Type, @Rank, @Distance, @URL)", connection);
+                    command = CreateCommand("insert into AddressSchool (address_id, school_id, type, rank, distance, url) " +
+                                            "values (@ID, @SchoolID, @Type, @Rank, @Distance, @URL)", connection);
                 }
                 else {
-                    command = new SQLiteCommand("update AddressSchool set address_id = @ID, school_id = @SchoolID, type = @Type, rank = @Rank, distance = @Distance, url = @URL " +
-                                                "where address_id = @ID and school_id = @SchoolID", connection);
+                    command = CreateCommand("update AddressSchool set address_id = @ID, school_id = @SchoolID, type = @Type, rank = @Rank, distance = @Distance, url = @URL " +
+                                            "where address_id = @ID and school_id = @SchoolID", connection);
                 }
 
                 // Parameters
-                command.Parameters.AddWithValue("@ID", id);
-                command.Parameters.AddWithValue("@SchoolID", s.id);
-                command.Parameters.AddWithValue("@Type", s.type);
-                command.Parameters.AddWithValue("@Rank", s.rank);
-                command.Parameters.AddWithValue("@Distance", s.distance);
-                command.Parameters.AddWithValue("@URL", s.url);
+                AddParameter(command, "@ID", id);
+                AddParameter(command, "@SchoolID", s.id);
+                AddParameter(command, "@Type", s.type);
+                AddParameter(command, "@Rank", s.rank);
+                AddParameter(command, "@Distance", s.distance);
+                AddParameter(command, "@URL", s.url);
 
                 // Execute
                 command.ExecuteNonQuery();
@@ -251,6 +257,28 @@ namespace ProppelScraper.Scraping {
 
             // Return
             return (addressID == null);
+        }
+
+        //--------------------------------------------------------------------------------
+        public static DbCommand CreateCommand(string commandText, DbConnection connection) {
+            if (Program.DatabaseIsMySQL)
+                return new MySqlCommand(commandText, (MySqlConnection)connection);
+            else
+                return new SQLiteCommand(commandText, (SQLiteConnection)connection);
+        }
+
+        //--------------------------------------------------------------------------------
+        public static DbCommand CreateCommand(string mysqlCommandText, string sqliteCommandText, DbConnection connection) {
+            return CreateCommand(Program.DatabaseIsMySQL ? mysqlCommandText : sqliteCommandText, connection);
+        }
+
+        //--------------------------------------------------------------------------------
+        public static DbCommand AddParameter(DbCommand command, string parameterName, object value) {
+            DbParameter parameter = command.CreateParameter();
+            parameter.ParameterName = parameterName;
+            parameter.Value = value;
+            command.Parameters.Add(parameter);
+            return command;
         }
 
 

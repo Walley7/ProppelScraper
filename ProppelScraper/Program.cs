@@ -1,10 +1,12 @@
 ﻿using CSACore.Core;
 using CSACore.Utility;
 using HtmlAgilityPack;
+using MySql.Data.MySqlClient;
 using ProppelScraper.Scraping;
 using ScrapySharp.Network;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
@@ -23,8 +25,8 @@ namespace ProppelScraper {
 
         //--------------------------------------------------------------------------------
         public enum EDatabaseMode {
-            INDEXED,
-            UNINDEXED
+            MYSQL,
+            SQLITE
         }
 
 
@@ -46,9 +48,9 @@ namespace ProppelScraper {
             }
 
             // Configuration
-            string connectionString = CSA.Setting("SQLiteConnectionString");
+            string connectionString = CSA.Setting("ConnectionString");
             string mode = CSA.Setting("Mode");
-            sDatabaseMode = (CSA.Setting("DatabaseMode") == "indexed" ? EDatabaseMode.INDEXED : EDatabaseMode.UNINDEXED);
+            sDatabaseMode = (CSA.Setting("DatabaseMode") == "mysql" ? EDatabaseMode.MYSQL : EDatabaseMode.SQLITE);
             string proxyIP = CSA.Setting("ProxyIP", false);
             string proxyUsername = CSA.Setting("ProxyUsername", false);
             string proxyPassword = CSA.Setting("ProxyPassword", false);
@@ -60,7 +62,7 @@ namespace ProppelScraper {
 
             // Tests
             /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(450000);
+            AddressData address = scraper.ScrapeAddress(539318);
             Console.WriteLine(address);
             return;*/
 
@@ -94,7 +96,11 @@ namespace ProppelScraper {
         //--------------------------------------------------------------------------------
         static void InitialiseDatabase(string connectionString) {
             // Connect
-            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            DbConnection connection;
+            if (DatabaseMode == EDatabaseMode.MYSQL)
+                connection = new MySqlConnection(connectionString);
+            else
+                connection = new SQLiteConnection(connectionString);
             connection.Open();
 
             // Tables
@@ -106,6 +112,8 @@ namespace ProppelScraper {
 
         //--------------------------------------------------------------------------------
         public static EDatabaseMode DatabaseMode { get => sDatabaseMode; }
+        public static bool DatabaseIsMySQL { get => sDatabaseMode == EDatabaseMode.MYSQL; }
+        public static bool DatabaseIsSQLite { get => sDatabaseMode == EDatabaseMode.SQLITE; }
 
 
         // SCRAPING ================================================================================

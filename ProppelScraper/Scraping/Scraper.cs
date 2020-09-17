@@ -1,8 +1,10 @@
 ﻿using CSACore.Logging;
 using CSACore.Utility;
 using HtmlAgilityPack;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Net;
 using System.Text;
@@ -23,7 +25,7 @@ namespace ProppelScraper.Scraping {
         private string                          mLogTrailingText;
 
         private string                          mConnectionString;
-        private SQLiteConnection                mConnection;
+        private DbConnection                    mConnection;
 
         private HtmlWeb                         mWeb = new HtmlWeb();
         private string                          mProxyIP;
@@ -92,15 +94,18 @@ namespace ProppelScraper.Scraping {
             CloseDatabase();
 
             // Connect
-            mConnection = new SQLiteConnection(mConnectionString);
+            if (Program.DatabaseIsMySQL)
+                mConnection = new MySqlConnection(mConnectionString);
+            else
+                mConnection = new SQLiteConnection(mConnectionString);
             mConnection.Open();
             LogInfo($"Connected to database.");
 
             // Configuration
-            //if (Program.DatabaseMode == Program.EDatabaseMode.INDEXED) {
-                SQLiteCommand command = new SQLiteCommand("PRAGMA journal_mode=WAL;", mConnection);
-                command.ExecuteNonQuery();
-                command.Dispose();
+            //if (Program.DatabaseIsSQLite) {
+            //    SQLiteCommand command = new SQLiteCommand("PRAGMA journal_mode=WAL;", (SQLiteConnection)mConnection);
+            //    command.ExecuteNonQuery();
+            //    command.Dispose();
             //}
         }
         
@@ -111,7 +116,7 @@ namespace ProppelScraper.Scraping {
         }
 
         //--------------------------------------------------------------------------------
-        public SQLiteConnection Connection { get => mConnection; }
+        public DbConnection Connection { get => mConnection; }
 
 
         // LOGGING ================================================================================

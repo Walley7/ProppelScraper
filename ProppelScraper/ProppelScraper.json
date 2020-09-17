@@ -1,10 +1,11 @@
 {
-  //"SQLiteConnectionString": "Data Source=C:/Proppel/addresses.db",
-  "SQLiteConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
-  //"SQLiteConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses_test.db",
+  //"ConnectionString": "Data Source=C:/Proppel/addresses.db",
+  //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
+  //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses_test.db",
+  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping; UID=root; Password=masterkey",
 
   "Mode": "properties",
-  "DatabaseMode": "unindexed",
+  "DatabaseMode": "mysql",
   "ProxyIP": "gate.dc.smartproxy.com:20000",
   "ProxyUsername": "sp8b329f9e",
   "ProxyPassword": "masterkey",

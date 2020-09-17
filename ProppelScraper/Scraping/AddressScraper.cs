@@ -1,6 +1,7 @@
 ﻿using CSACore.Utility;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Text;
 
@@ -49,8 +50,8 @@ namespace ProppelScraper.Scraping {
             // Scrape
             try {
                 // Status
-                SQLiteCommand command = new SQLiteCommand("select status from Address where id = @ID", Connection);
-                command.Parameters.AddWithValue("@ID", AddressID(id));
+                DbCommand command = AddressData.CreateCommand("select status from Address where id = @ID", Connection);
+                AddressData.AddParameter(command, "@ID", AddressID(id));
                 string status = (string)command.ExecuteScalar() ?? "";
                 command.Dispose();
 
