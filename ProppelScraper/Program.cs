@@ -56,6 +56,15 @@ namespace ProppelScraper {
             string proxyPassword = CSA.Setting("ProxyPassword", false);
             string[][] propertyRanges = CSA.Array2DSetting("PropertyRanges");
             string[][] reportRanges = CSA.Array2DSetting("ReportRanges");
+            int generatedThreads = UConvert.FromString<int>(CSA.Setting("GeneratedThreads", false), 0);
+            string[] generatedPropertyRange = CSA.ArraySetting("GeneratedPropertyRange");
+            string[] generatedReportRange = CSA.ArraySetting("GeneratedReportRange");
+
+            // Generated ranges
+            if (generatedThreads > 0 && generatedPropertyRange.Length > 0)
+                propertyRanges = GenerateRanges(generatedThreads, generatedPropertyRange);
+            if (generatedThreads > 0 && generatedReportRange.Length > 0)
+                reportRanges = GenerateRanges(generatedThreads, generatedReportRange);
 
             // Initialise database
             InitialiseDatabase(connectionString);
@@ -152,6 +161,27 @@ namespace ProppelScraper {
                 scraper.Scrape();
                 return $"Thread {Thread.CurrentThread.ManagedThreadId}";
             });
+        }
+
+
+        // RANGES ================================================================================
+        //--------------------------------------------------------------------------------
+        private static string[][] GenerateRanges(int threads, string[] range) {
+            // Range
+            string state = range[0];
+            int lowerRange = UConvert.FromString<int>(range[1]);
+            int upperRange = UConvert.FromString<int>(range[2]);
+            int threadRange = (int)Math.Ceiling((decimal)(upperRange + 1 - lowerRange) / (decimal)threads);
+
+            // Generate
+            List<string[]> ranges = new List<string[]>();
+            for (int i = lowerRange; i <= upperRange; i += threadRange) {
+                ranges.Add(new string[] { state, i.ToString(), (i + threadRange - 1).ToString() });
+                //CSA.Logger.LogInfo($"Range: {state}, {i}, {Math.Min(i + threadRange - 1, upperRange)}");
+            }
+
+            // Return
+            return ranges.ToArray();
         }
     }
 
