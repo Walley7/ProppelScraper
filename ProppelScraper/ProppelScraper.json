@@ -10,7 +10,7 @@
   "ProxyUsername": "sp8b329f9e",
   "ProxyPassword": "masterkey",
 
-  "GeneratedThreads": 48,
+  "GeneratedThreads": 64,
   "GeneratedPropertyRange": [ "vic", 0, 511 ],
   "GeneratedReportRange": [ "vic", 0, 511 ],
 

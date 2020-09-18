@@ -60,6 +60,7 @@ namespace ProppelScraper.Scraping {
 
                 scraper.ReadPast("\" target=\"_blank\">Days on Market</a>");
                 scraper.ReadPast("<td><b>Last Sold</b>");
+                scraper.ReadPast("<td><b>List</b>");
 
                 if (scraper.ReadPastCheck("<td><b>Rent</b>")) {
                     //address.rent = scraper.ReadPastAndTo("target=\"_blank\">", " in ");
