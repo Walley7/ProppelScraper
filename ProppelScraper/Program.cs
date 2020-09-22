@@ -72,10 +72,10 @@ namespace ProppelScraper {
             InitialiseDatabase(connectionString);
 
             // Tests
-            PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(1738757); //1754802
+            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
+            AddressData address = scraper.ScrapeAddress(764999); // 1738757, 1754802
             Console.WriteLine(address);
-            return;
+            return;*/
 
             /*SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Open();

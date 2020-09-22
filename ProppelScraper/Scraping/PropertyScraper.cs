@@ -77,11 +77,13 @@ namespace ProppelScraper.Scraping {
                 address.bedrooms = scraper.ReadToAndSkip(" <img src=\"/img/bed.png\" border=\"0\" alt=\"Bed rooms\" title=\"Bed rooms\"> ").Replace(" ", "");
                 address.bathrooms = scraper.ReadToAndSkip(" <img src=\"/img/bath.png\" border=\"0\" alt=\"Bath rooms\" title=\"Bath rooms\"> ").Replace(" ", "");
                 address.carSpaces = scraper.ReadToAndSkip(" <img src=\"/img/car.png\" border=\"0\" alt=\"Car spaces\" title=\"Car spaces\">").Replace(" ", "");
-                
+
                 //address.landSize = scraper.ReadPastAndToOrTo("<td><b>Land size:</b> ", " | <b>Building size:</b>", "&nbsp;<a href=\"measure.php");
-                address.landSize = scraper.ReadPastAndPast("<td><b>Land size:</b> ", " sqm");
+                //address.landSize = scraper.ReadPastAndPast("<td><b>Land size:</b> ", " sqm");
+                address.landSize = scraper.ReadPastAndShortestPastOrTo("<td><b>Land size:</b> ", " sqm", "&nbsp;<a href=\"measure.php");
                 //address.buildingSize = scraper.ReadPastAndTo("Building size:</b> ", "&nbsp;<a href=\"measure.php");
-                address.buildingSize = scraper.ReadPastAndPast("<b>Building size:</b> ", " sqm");
+                //address.buildingSize = scraper.ReadPastAndPast("<b>Building size:</b> ", " sqm");
+                address.buildingSize = scraper.ReadPastAndShortestPastOrTo("<b>Building size:</b> ", " sqm", "&nbsp;<a href=\"measure.php");
 
                 address.buildYear = scraper.ReadPastAndTo("<td><b>Build year:</b> ", "</td>");
                 address.agent = scraper.ReadPastAndTo("<td><b>Agent:</b> ", "</td>");

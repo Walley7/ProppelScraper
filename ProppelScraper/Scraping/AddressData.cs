@@ -99,7 +99,7 @@ namespace ProppelScraper.Scraping {
                     // Query
                     DbCommand tableCommand = CreateCommand(
                         "create table Address (" +
-                        "  id varchar(32)" + (Program.DatabaseIsMySQL ? " not null" : "") + (Program.RecordLookup ? " primary key" : "") + ", " +
+                        "  id varchar(32)" + (Program.DatabaseIsMySQL ? " not null" : "") + ", " +
                         "  source varchar(32), " +
                         "  status varchar(32), " +
                         "  address varchar(256), " +
@@ -136,6 +136,7 @@ namespace ProppelScraper.Scraping {
                 }
             }
 
+            // Address school table
             using (DbCommand command = CreateCommand($"select table_name from information_schema.tables where table_schema = '{connection.Database}' and table_name = 'AddressSchool'",
                                                      "select name from sqlite_master where type = 'table' and name = 'AddressSchool'", connection))
             {
@@ -143,7 +144,6 @@ namespace ProppelScraper.Scraping {
                     // Query
                     DbCommand tableCommand = CreateCommand(
                         "create table AddressSchool (" +
-                        "  id integer" + (Program.DatabaseIsMySQL ? " not null auto_increment" : "") + " primary key, " +
                         "  address_id varchar(32) references Address(id), " +
                         "  school_id varchar(32), " +
                         "  name varchar(256), " +
@@ -160,6 +160,34 @@ namespace ProppelScraper.Scraping {
                     tableCommand.Dispose();
                     CSA.Logger.LogInfo("Created address school table.");
                 };
+            }
+
+            // Indexing - address
+            if (Program.RecordLookup) {
+                using (DbCommand command = CreateCommand($"select table_name from information_schema.statistics where table_schema = '{connection.Database}' and table_name = 'Address' and index_name = 'PRIMARY'",
+                                                         "", connection))
+                {
+                    if (command.ExecuteScalar() == null) {
+                        DbCommand tableCommand = CreateCommand("alter table Address add primary key (id)", "", connection);
+                        tableCommand.ExecuteNonQuery();
+                        tableCommand.Dispose();
+                        CSA.Logger.LogInfo("Added primary key to address table.");
+                    }
+                }
+            }
+
+            // Indexing - address school
+            if (Program.RecordLookup) {
+                using (DbCommand command = CreateCommand($"select table_name from information_schema.statistics where table_schema = '{connection.Database}' and table_name = 'AddressSchool' and index_name = 'PRIMARY'",
+                                                         "", connection))
+                {
+                    if (command.ExecuteScalar() == null) {
+                        DbCommand tableCommand = CreateCommand("alter table AddressSchool add id integer not null auto_increment primary key", "", connection);
+                        tableCommand.ExecuteNonQuery();
+                        tableCommand.Dispose();
+                        CSA.Logger.LogInfo("Added primary key to address school table.");
+                    }
+                }
             }
         }
 

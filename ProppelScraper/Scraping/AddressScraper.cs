@@ -52,7 +52,7 @@ namespace ProppelScraper.Scraping {
                 // Status
                 DbCommand command = AddressData.CreateCommand("select status from Address where id = @ID", Connection);
                 AddressData.AddParameter(command, "@ID", AddressID(id));
-                string status = (string)command.ExecuteScalar() ?? "";
+                string status = Program.RecordLookup ? (string)command.ExecuteScalar() ?? "" : "";
                 command.Dispose();
 
                 // Already processed

@@ -12,8 +12,8 @@
   "ProxyPassword": "masterkey",
 
   "GeneratedThreads": 16,
-  "GeneratedPropertyRange": [ "vic", 1500000, 2999999 ],
-  "GeneratedReportRange": [ "vic", 0, 2047 ],
+  "GeneratedPropertyRange": [ "vic", 0, 1499999 ],
+  "GeneratedReportRange": [ "vic", 0, 1000 ],
 
   "PropertyRanges": [
     [ "vic", 0, 9 ],
