@@ -32,6 +32,7 @@ namespace ProppelScraper {
 
         //================================================================================
         private static EDatabaseMode            sDatabaseMode;
+        private static bool                     sRecordLookup;
 
 
         //================================================================================
@@ -51,6 +52,7 @@ namespace ProppelScraper {
             string connectionString = CSA.Setting("ConnectionString");
             string mode = CSA.Setting("Mode");
             sDatabaseMode = (CSA.Setting("DatabaseMode") == "mysql" ? EDatabaseMode.MYSQL : EDatabaseMode.SQLITE);
+            sRecordLookup = UConvert.FromString<bool>(CSA.Setting("RecordLookup"));
             string proxyIP = CSA.Setting("ProxyIP", false);
             string proxyUsername = CSA.Setting("ProxyUsername", false);
             string proxyPassword = CSA.Setting("ProxyPassword", false);
@@ -70,10 +72,10 @@ namespace ProppelScraper {
             InitialiseDatabase(connectionString);
 
             // Tests
-            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(539318);
+            PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
+            AddressData address = scraper.ScrapeAddress(1738757); //1754802
             Console.WriteLine(address);
-            return;*/
+            return;
 
             /*SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Open();
@@ -123,6 +125,7 @@ namespace ProppelScraper {
         public static EDatabaseMode DatabaseMode { get => sDatabaseMode; }
         public static bool DatabaseIsMySQL { get => sDatabaseMode == EDatabaseMode.MYSQL; }
         public static bool DatabaseIsSQLite { get => sDatabaseMode == EDatabaseMode.SQLITE; }
+        public static bool RecordLookup { get => sRecordLookup; }
 
 
         // SCRAPING ================================================================================

@@ -99,7 +99,7 @@ namespace ProppelScraper.Scraping {
                     // Query
                     DbCommand tableCommand = CreateCommand(
                         "create table Address (" +
-                        "  id varchar(32)" + (Program.DatabaseIsMySQL ? " not null" : "") + " primary key, " +
+                        "  id varchar(32)" + (Program.DatabaseIsMySQL ? " not null" : "") + (Program.RecordLookup ? " primary key" : "") + ", " +
                         "  source varchar(32), " +
                         "  status varchar(32), " +
                         "  address varchar(256), " +
@@ -146,6 +146,7 @@ namespace ProppelScraper.Scraping {
                         "  id integer" + (Program.DatabaseIsMySQL ? " not null auto_increment" : "") + " primary key, " +
                         "  address_id varchar(32) references Address(id), " +
                         "  school_id varchar(32), " +
+                        "  name varchar(256), " +
                         "  type varchar(32), " +
                         "  rank varchar(32), " +
                         "  distance varchar(128), " +
@@ -167,7 +168,7 @@ namespace ProppelScraper.Scraping {
             // Address - ID
             DbCommand command = CreateCommand("select id from Address where id = @ID", connection);
             AddParameter(command, "@ID", id);
-            object addressID = command.ExecuteScalar();
+            object addressID = Program.RecordLookup ? command.ExecuteScalar() : null;
             command.Dispose();
 
             // Address - query
@@ -229,22 +230,23 @@ namespace ProppelScraper.Scraping {
                 command = CreateCommand("select id from AddressSchool where address_id = @ID and school_id = @SchoolID", connection);
                 AddParameter(command, "@ID", id);
                 AddParameter(command, "@SchoolID", s.id);
-                object schoolID = command.ExecuteScalar();
+                object schoolID = Program.RecordLookup ? command.ExecuteScalar() : null;
                 command.Dispose();
 
                 // Query
                 if (schoolID == null) {
-                    command = CreateCommand("insert into AddressSchool (address_id, school_id, type, rank, distance, url) " +
-                                            "values (@ID, @SchoolID, @Type, @Rank, @Distance, @URL)", connection);
+                    command = CreateCommand("insert into AddressSchool (address_id, school_id, name, type, rank, distance, url) " +
+                                            "values (@ID, @SchoolID, @Name, @Type, @Rank, @Distance, @URL)", connection);
                 }
                 else {
-                    command = CreateCommand("update AddressSchool set address_id = @ID, school_id = @SchoolID, type = @Type, rank = @Rank, distance = @Distance, url = @URL " +
+                    command = CreateCommand("update AddressSchool set address_id = @ID, school_id = @SchoolID, name = @Name, type = @Type, rank = @Rank, distance = @Distance, url = @URL " +
                                             "where address_id = @ID and school_id = @SchoolID", connection);
                 }
 
                 // Parameters
                 AddParameter(command, "@ID", id);
                 AddParameter(command, "@SchoolID", s.id);
+                AddParameter(command, "@Name", s.name);
                 AddParameter(command, "@Type", s.type);
                 AddParameter(command, "@Rank", s.rank);
                 AddParameter(command, "@Distance", s.distance);

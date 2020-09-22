@@ -55,7 +55,7 @@ namespace ProppelScraper.Scraping {
 
                 if (scraper.ReadPastCheck("<td><b>Sold ")) {
                     address.soldFor = scraper.ReadTo("</b>");
-                    address.soldOn = scraper.ReadPastAndTo("</b> in ", "&nbsp;<a href=");
+                    address.soldOn = scraper.ReadPastAndTo("</b> in ", "&nbsp;<a href=").Trim();
                 }
 
                 scraper.ReadPast("\" target=\"_blank\">Days on Market</a>");

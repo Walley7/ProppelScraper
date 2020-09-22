@@ -6,13 +6,14 @@
 
   "Mode": "properties",
   "DatabaseMode": "mysql",
+  "RecordLookup": false,
   "ProxyIP": "gate.dc.smartproxy.com:20000",
   "ProxyUsername": "sp8b329f9e",
   "ProxyPassword": "masterkey",
 
-  "GeneratedThreads": 48,
-  "GeneratedPropertyRange": [ "vic", 0, 511 ],
-  "GeneratedReportRange": [ "vic", 0, 511 ],
+  "GeneratedThreads": 16,
+  "GeneratedPropertyRange": [ "vic", 1500000, 2999999 ],
+  "GeneratedReportRange": [ "vic", 0, 2047 ],
 
   "PropertyRanges": [
     [ "vic", 0, 9 ],
