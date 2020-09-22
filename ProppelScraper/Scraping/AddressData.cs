@@ -144,7 +144,7 @@ namespace ProppelScraper.Scraping {
                     // Query
                     DbCommand tableCommand = CreateCommand(
                         "create table AddressSchool (" +
-                        "  address_id varchar(32) references Address(id), " +
+                        "  address_id varchar(32), " +
                         "  school_id varchar(32), " +
                         "  name varchar(256), " +
                         "  type varchar(32), " +
@@ -182,7 +182,7 @@ namespace ProppelScraper.Scraping {
                                                          "", connection))
                 {
                     if (command.ExecuteScalar() == null) {
-                        DbCommand tableCommand = CreateCommand("alter table AddressSchool add id integer not null auto_increment primary key", "", connection);
+                        DbCommand tableCommand = CreateCommand("alter table AddressSchool add id integer not null auto_increment primary key, add foreign key (address_id) references Address(id)", "", connection);
                         tableCommand.ExecuteNonQuery();
                         tableCommand.Dispose();
                         CSA.Logger.LogInfo("Added primary key to address school table.");
