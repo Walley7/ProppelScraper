@@ -61,6 +61,13 @@ namespace ProppelScraper {
             int generatedThreads = UConvert.FromString<int>(CSA.Setting("GeneratedThreads", false), 0);
             string[] generatedPropertyRange = CSA.ArraySetting("GeneratedPropertyRange");
             string[] generatedReportRange = CSA.ArraySetting("GeneratedReportRange");
+            int threads = UConvert.FromString<int>(CSA.Setting("Threads", false), 0);
+            string propertyState = CSA.Setting("PropertyState", false);
+            int propertyMinimumID = UConvert.FromString<int>(CSA.Setting("PropertyMinimumID", false), 0);
+            int propertyMaximumID = UConvert.FromString<int>(CSA.Setting("PropertyMaximumID", false), 0);
+            string reportState = CSA.Setting("ReportState", false);
+            int reportMinimumID = UConvert.FromString<int>(CSA.Setting("ReportMinimumID", false), 0);
+            int reportMaximumID = UConvert.FromString<int>(CSA.Setting("ReportMaximumID", false), 0);
 
             // Generated ranges
             if (generatedThreads > 0 && generatedPropertyRange.Length > 0)
@@ -87,15 +94,17 @@ namespace ProppelScraper {
             Console.WriteLine(address);*/
 
             // Scrape
-            if (mode.Contains("reports")) {
-                CSA.Logger.LogBreak();
-                CSA.Logger.LogInfo("REPORTS:");
-                ScrapeAddresses(StartReportScrapeTask, connectionString, proxyIP, proxyUsername, proxyPassword, reportRanges);
-            }
             if (mode.Contains("properties")) {
                 CSA.Logger.LogBreak();
                 CSA.Logger.LogInfo("PROPERTIES:");
-                ScrapeAddresses(StartPropertyScrapeTask, connectionString, proxyIP, proxyUsername, proxyPassword, propertyRanges);
+                //ScrapeAddresses(StartPropertyScrapeTask, connectionString, proxyIP, proxyUsername, proxyPassword, propertyRanges);
+                ScrapeAddresses(StartPropertyScrapeTask, connectionString, proxyIP, proxyUsername, proxyPassword, threads, propertyState, propertyMinimumID, propertyMaximumID);
+            }
+            if (mode.Contains("reports")) {
+                CSA.Logger.LogBreak();
+                CSA.Logger.LogInfo("REPORTS:");
+                //ScrapeAddresses(StartReportScrapeTask, connectionString, proxyIP, proxyUsername, proxyPassword, reportRanges);
+                ScrapeAddresses(StartReportScrapeTask, connectionString, proxyIP, proxyUsername, proxyPassword, threads, reportState, reportMinimumID, reportMaximumID);
             }
 
             // Shutdown
@@ -130,8 +139,50 @@ namespace ProppelScraper {
 
         // SCRAPING ================================================================================
         //--------------------------------------------------------------------------------
-        static void ScrapeAddresses(Func<string, string, string, string, string, int, int, Task<string>> scrapeTaskFunction, string connectionString,
-                                    string proxyIP, string proxyUsername, string proxyPassword, string[][] ranges)
+        static void ScrapeAddresses(Func<string, string, string, string, string, IDProvider, Task<string>> scrapeTaskFunction, string connectionString,
+                                    string proxyIP, string proxyUsername, string proxyPassword, int threads, string state, int minimumID, int maximumID)
+        {
+            // ID provider
+            IDProvider idProvider = new IDProvider(minimumID, maximumID);
+
+            // Scrape
+            List<Task<string>> tasks = new List<Task<string>>();
+            for (int i = 0; i < threads; ++i) {
+                tasks.Add(scrapeTaskFunction(connectionString, proxyIP, proxyUsername, proxyPassword, state, idProvider));
+            }
+
+            // Wait
+            Task.WaitAll(tasks.ToArray());
+
+            // Results
+            foreach (Task<string> t in tasks) {
+                CSA.Logger.LogInfo($"TASK COMPLETE: {t.Result}");
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+        static Task<string> StartPropertyScrapeTask(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, IDProvider idProvider) {
+            return Task.Factory.StartNew(() => {
+                PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, state, idProvider);
+                scraper.Scrape();
+                return $"Thread {Thread.CurrentThread.ManagedThreadId}";
+            });
+        }
+
+        //--------------------------------------------------------------------------------
+        static Task<string> StartReportScrapeTask(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, IDProvider idProvider) {
+            return Task.Factory.StartNew(() => {
+                ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, state, idProvider);
+                scraper.Scrape();
+                return $"Thread {Thread.CurrentThread.ManagedThreadId}";
+            });
+        }
+
+
+        // SCRAPING - RANGE BASED ================================================================================
+        //--------------------------------------------------------------------------------
+        static void ScrapeAddressesByRange(Func<string, string, string, string, string, int, int, Task<string>> scrapeTaskFunction, string connectionString,
+                                           string proxyIP, string proxyUsername, string proxyPassword, string[][] ranges)
         {
             // Scrape
             List<Task<string>> tasks = new List<Task<string>>();
@@ -149,18 +200,18 @@ namespace ProppelScraper {
         }
 
         //--------------------------------------------------------------------------------
-        static Task<string> StartReportScrapeTask(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, int minimumID, int maximumID) {
+        static Task<string> StartPropertyScrapeByRangeTask(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, int minimumID, int maximumID) {
             return Task.Factory.StartNew(() => {
-                ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, state, minimumID, maximumID);
+                PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, state, minimumID, maximumID);
                 scraper.Scrape();
                 return $"Thread {Thread.CurrentThread.ManagedThreadId}";
             });
         }
 
         //--------------------------------------------------------------------------------
-        static Task<string> StartPropertyScrapeTask(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, int minimumID, int maximumID) {
+        static Task<string> StartReportScrapeByRangeTask(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, int minimumID, int maximumID) {
             return Task.Factory.StartNew(() => {
-                PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, state, minimumID, maximumID);
+                ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, state, minimumID, maximumID);
                 scraper.Scrape();
                 return $"Thread {Thread.CurrentThread.ManagedThreadId}";
             });

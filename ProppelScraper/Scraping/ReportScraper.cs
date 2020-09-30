@@ -19,6 +19,10 @@ namespace ProppelScraper.Scraping {
         public ReportScraper(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, int minimumID = -1, int maximumID = -1) :
         base(connectionString, proxyIP, proxyUsername, proxyPassword, BASE_URL, state, minimumID, maximumID) { }
 
+        //--------------------------------------------------------------------------------
+        public ReportScraper(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string state, IDProvider idProvider) :
+        base(connectionString, proxyIP, proxyUsername, proxyPassword, BASE_URL, state, idProvider) { }
+
 
         // SCRAPING ================================================================================
         //--------------------------------------------------------------------------------

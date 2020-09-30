@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.Text;
-
-
+using System.Threading;
 
 namespace ProppelScraper.Scraping {
 
@@ -15,6 +14,7 @@ namespace ProppelScraper.Scraping {
         private string                          mState;
         private int                             mMinimumID;
         private int                             mMaximumID;
+        private IDProvider                      mIDProvider;
 
 
         //================================================================================
@@ -27,6 +27,14 @@ namespace ProppelScraper.Scraping {
             mMaximumID = maximumID;
         }
 
+        //--------------------------------------------------------------------------------
+        public AddressScraper(string connectionString, string proxyIP, string proxyUsername, string proxyPassword, string url, string state, IDProvider idProvider) :
+        base(connectionString, proxyIP, proxyUsername, proxyPassword) {
+            mURL = url;
+            mState = state;
+            mIDProvider = idProvider;
+        }
+
 
         // SCRAPING ================================================================================
         //--------------------------------------------------------------------------------
@@ -35,9 +43,21 @@ namespace ProppelScraper.Scraping {
             OpenLog();
             OpenDatabase();
 
-            // Scrape
-            for (int i = mMinimumID; i <= mMaximumID; ++i) {
-                Scrape(i);
+            // Scrape - by range
+            if (mIDProvider == null) {
+                for (int i = mMinimumID; i <= mMaximumID; ++i) {
+                    Scrape(i);
+                }
+            }
+
+            // Scrape - by provider
+            if (mIDProvider != null) {
+                while (true) {
+                    int? id = mIDProvider.NextID();
+                    if (id == null)
+                        break;
+                    Scrape((int)id);
+                }
             }
 
             // Close
@@ -105,7 +125,16 @@ namespace ProppelScraper.Scraping {
         // LOGGING ================================================================================
         //--------------------------------------------------------------------------------
         public void LogInfo(int id, string text) { LogInfo($"{mState}-{id}: {text}"); }
-        protected override string LogFilename { get => $"Log ^ {UDateTime.Timestamp()} ^ {mState}-{mMinimumID}-{mMaximumID}.log"; }
+
+        //--------------------------------------------------------------------------------
+        protected override string LogFilename {
+            get {
+                if (mIDProvider == null)
+                    return $"Log ^ {UDateTime.Timestamp()} ^ {mState}-{mMinimumID}-{mMaximumID}.log";
+                else
+                    return $"Log ^ {UDateTime.Timestamp()} ^ {Thread.CurrentThread.ManagedThreadId} ^ {mState}-{mIDProvider.MinimumID}-{mIDProvider.MaximumID}.log";
+            }
+        }
     }
 
 }
