@@ -20,7 +20,7 @@
   "ReportMaximumID": 500,
 
   "GeneratedThreads": 16,
-  "GeneratedPropertyRange": [ "vic", 0, 500 ],
+  "GeneratedPropertyRange": [ "vic", 0, 100000 ],
   "GeneratedReportRange": [ "vic", 0, 1000 ],
 
   "PropertyRanges": [

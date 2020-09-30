@@ -48,6 +48,8 @@ namespace ProppelScraper {
                 return;
             }
 
+            https://dotnetcodr.com/2015/06/03/modifying-a-shared-integer-in-a-thread-safe-manner-in-net/
+
             // Configuration
             string connectionString = CSA.Setting("ConnectionString");
             string mode = CSA.Setting("Mode");
@@ -230,7 +232,7 @@ namespace ProppelScraper {
             // Generate
             List<string[]> ranges = new List<string[]>();
             for (int i = lowerRange; i <= upperRange; i += threadRange) {
-                ranges.Add(new string[] { state, i.ToString(), (i + threadRange - 1).ToString() });
+                ranges.Add(new string[] { state, i.ToString(), (Math.Min(i + threadRange - 1, upperRange)).ToString() });
                 //CSA.Logger.LogInfo($"Range: {state}, {i}, {Math.Min(i + threadRange - 1, upperRange)}");
             }
 
