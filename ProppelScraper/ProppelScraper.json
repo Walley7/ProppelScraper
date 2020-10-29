@@ -12,9 +12,9 @@
   "ProxyPassword": "masterkey",
 
   "Threads": 64,
-  "PropertyState": "vic",
+  "PropertyState": "sa",
   "PropertyMinimumID": 0,
-  "PropertyMaximumID": 10000,
+  "PropertyMaximumID": 1000000,
   "ReportState": "vic",
   "ReportMinimumID": 0,
   "ReportMaximumID": 500,

@@ -104,7 +104,7 @@ namespace ProppelScraper.Scraping {
                 // Description section
                 if (scraper.ReadToCheck("Lot/Plan No: ")) {
                     address.lot = scraper.ReadPastAndTo("Lot/Plan No: ", "/");
-                    address.planNumber = scraper.ReadPastAndTo("/", "</div></td>");
+                    address.planNumber = scraper.ReadPastAndTo("/", "</div>");
                 }
 
                 address.propertyZoneURL = scraper.ReadToAndTo("http://www.showneighbour.com/propertyzone.php?", "\" target=\"_blank\">Property's zone");

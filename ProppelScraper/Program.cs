@@ -48,8 +48,6 @@ namespace ProppelScraper {
                 return;
             }
 
-            https://dotnetcodr.com/2015/06/03/modifying-a-shared-integer-in-a-thread-safe-manner-in-net/
-
             // Configuration
             string connectionString = CSA.Setting("ConnectionString");
             string mode = CSA.Setting("Mode");
@@ -81,8 +79,8 @@ namespace ProppelScraper {
             InitialiseDatabase(connectionString);
 
             // Tests
-            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(764999); // 1738757, 1754802
+            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "qld");
+            AddressData address = scraper.ScrapeAddress(33276);
             Console.WriteLine(address);
             return;*/
 
