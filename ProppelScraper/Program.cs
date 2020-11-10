@@ -84,14 +84,15 @@ namespace ProppelScraper {
             Console.WriteLine(address);
             return;*/
 
+            /*ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
+            AddressData address = scraper.ScrapeAddress(5516); // 2910325
+            Console.WriteLine(address);
+            return;*/
+
             /*SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Open();
             address.Save(connection);
             connection.Dispose();*/
-
-            /*ReportScraper scraper = new ReportScraper(connectionString, "vic");
-            AddressData address = scraper.ScrapeAddress(4619); // 10000, 2910325, 3000000
-            Console.WriteLine(address);*/
 
             // Scrape
             if (mode.Contains("properties")) {

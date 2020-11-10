@@ -79,9 +79,16 @@ namespace ProppelScraper.Scraping {
                     address.soldFor = scraper.ReadTo(" in ");
                     address.soldOn = scraper.ReadPastAndTo(" in ", "</a></td></tr>");
                 }
+                
+                //address.estimatedLowerValue = scraper.ReadPastAndTo("<tr><td><b>Estimate:</b></td><td>", " - ");
+                //address.estimatedUpperValue = scraper.ReadPastAndTo(" - ", "</td></tr>");
 
-                address.estimatedLowerValue = scraper.ReadPastAndTo("<tr><td><b>Estimate:</b></td><td>", " - ");
-                address.estimatedUpperValue = scraper.ReadPastAndTo(" - ", "</td></tr>");
+                string[] estimatedValues = scraper.ReadPastAndTo("<tr><td><b>Estimate:</b></td><td>", "</td></tr>").Split(" - ", StringSplitOptions.RemoveEmptyEntries);
+                if (estimatedValues.Length > 0)
+                    address.estimatedLowerValue = estimatedValues[0];
+                if (estimatedValues.Length > 1)
+                    address.estimatedUpperValue = estimatedValues[1];
+
                 address.buildYear = scraper.ReadPastAndTo("<td><b>Build year:</b></td><td>", "</td></tr>");
                 //address.distances = scraper.ReadPastAndToOrTo("<td><b>Distance:</b> ", "&nbsp;<a href=", "</td></tr>"); // Can't get this - it's auto-generated from a span somehow
 
