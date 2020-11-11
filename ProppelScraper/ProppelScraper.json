@@ -4,7 +4,7 @@
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses_test.db",
   "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping; UID=root; Password=masterkey",
 
-  "Mode": "properties",
+  "Mode": "reports",
   "DatabaseMode": "mysql",
   "RecordLookup": true,
   "ProxyIP": "gate.dc.smartproxy.com:20000",
@@ -17,7 +17,7 @@
   "PropertyMaximumID": 1000000,
   "ReportState": "vic",
   "ReportMinimumID": 0,
-  "ReportMaximumID": 500,
+  "ReportMaximumID": 1000000,
 
   "GeneratedThreads": 16,
   "GeneratedPropertyRange": [ "vic", 0, 100000 ],
