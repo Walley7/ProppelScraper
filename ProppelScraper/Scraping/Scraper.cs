@@ -17,7 +17,7 @@ namespace ProppelScraper.Scraping {
 
     public abstract class Scraper {
         //================================================================================
-        public const int                        MAXIMUM_DOWNLOAD_ATTEMPTS = 3;
+        public const int                        MAXIMUM_DOWNLOAD_ATTEMPTS = 5;
         public const int                        DOWNLOAD_TIMEOUT = 30000;
 
 
@@ -59,7 +59,7 @@ namespace ProppelScraper.Scraping {
 
         // WEB ================================================================================
         //--------------------------------------------------------------------------------
-        protected HtmlDocument DownloadURL(string url, int maximumAttempts = 5) {
+        protected HtmlDocument DownloadURL(string url, int maximumAttempts = MAXIMUM_DOWNLOAD_ATTEMPTS) {
             // Attempts
             mDownloadAttempts = 1;
 

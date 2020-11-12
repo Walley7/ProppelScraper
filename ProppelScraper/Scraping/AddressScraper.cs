@@ -7,9 +7,15 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
+
+
 namespace ProppelScraper.Scraping {
 
     public abstract class AddressScraper : Scraper {
+        //================================================================================
+        public const int                        MAXIMUM_SCRAPE_ATTEMPTS = 5;
+
+
         //================================================================================
         private string                          mURL;
         private string                          mState;
@@ -85,14 +91,25 @@ namespace ProppelScraper.Scraping {
 
                 // Address
                 LogTrailingText = "";
-                AddressData address = ScrapeAddress(id);
-                if (address == null)
-                    return;
-                if (address.status == AddressData.Status.BLOCKED) {
-                    LogInfo(id, "BLOCKED BY WEBSITE");
-                    return;
+                AddressData address;
+                int attempts = 1;
+
+                // Scrape
+                while (true) {
+                    address = ScrapeAddress(id);
+                    if (address == null)
+                        return;
+                    if (address.status != AddressData.Status.SCRAPED || address.status == AddressData.Status.NOT_ADDRESS)
+                        break;
+                    else if (address.status == AddressData.Status.BLOCKED)
+                        LogInfo(id, "BLOCKED BY WEBSITE");
+                    if (attempts >= MAXIMUM_SCRAPE_ATTEMPTS) {
+                        LogInfo(id, $"FAILED AFTER {MAXIMUM_SCRAPE_ATTEMPTS} ATTEMPTS");
+                        return;
+                    }
+                    ++attempts;
                 }
-                
+
                 // Update database
                 LogInfo(id, address.StatusDisplayString + ".");
                 address.Save(Connection);
