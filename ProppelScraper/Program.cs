@@ -78,7 +78,7 @@ namespace ProppelScraper {
             return;*/
 
             /*ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(25541); // 25540
+            AddressData address = scraper.ScrapeAddress(572638); // 25541
             Console.WriteLine(address);
             return;*/
 
