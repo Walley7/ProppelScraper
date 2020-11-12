@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -21,7 +22,8 @@ namespace ProppelScraper {
     class Program {
         //================================================================================
         public const string                     CONFIGURATION_PATH = "ProppelScraper.json";
-        public const string                     LOG_PATH = "Log.log";
+        public const string                     LOGGING_PATH = "Logs";
+        public const string                     LOG_FILENAME = "Log.log";
 
         //--------------------------------------------------------------------------------
         public enum EDatabaseMode {
@@ -42,7 +44,7 @@ namespace ProppelScraper {
             // Initialise - CSA
             try {
                 CSA.Initialise(CONFIGURATION_PATH);
-                CSA.OpenLog(LOG_PATH);
+                CSA.OpenLog(Path.Combine(LOGGING_PATH, LOG_FILENAME));
             }
             catch (Exception e) {
                 Console.WriteLine($"Failed to initialise: {e.Message}");

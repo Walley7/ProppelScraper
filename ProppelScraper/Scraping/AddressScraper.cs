@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -128,12 +129,12 @@ namespace ProppelScraper.Scraping {
         public void LogInfo(int id, string text) { LogInfo($"{mState}-{id}: {text}"); }
 
         //--------------------------------------------------------------------------------
-        protected override string LogFilename {
+        protected override string LogPath {
             get {
                 if (mIDProvider == null)
-                    return $"Log ^ {UDateTime.Timestamp()} ^ {mState}-{mMinimumID}-{mMaximumID}.log";
+                    return Path.Combine(Program.LOGGING_PATH, $"Log ^ {UDateTime.Timestamp()} ^ {mState}-{mMinimumID}-{mMaximumID}.log");
                 else
-                    return $"Log ^ {UDateTime.Timestamp()} ^ {Thread.CurrentThread.ManagedThreadId} ^ {mState}-{mIDProvider.MinimumID}-{mIDProvider.MaximumID}.log";
+                    return Path.Combine(Program.LOGGING_PATH, $"Log ^ {UDateTime.Timestamp()} ^ {Thread.CurrentThread.ManagedThreadId} ^ {mState}-{mIDProvider.MinimumID}-{mIDProvider.MaximumID}.log");
             }
         }
     }

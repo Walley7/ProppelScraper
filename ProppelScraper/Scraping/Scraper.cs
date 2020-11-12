@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -126,7 +127,7 @@ namespace ProppelScraper.Scraping {
             CloseLog();
 
             // Open
-            mLogger = new Logger(UFile.IncrementalFreePath(LogFilename));
+            mLogger = new Logger(UFile.IncrementalFreePath(LogPath));
             LogStart();
         }
         
@@ -161,7 +162,7 @@ namespace ProppelScraper.Scraping {
 
         //--------------------------------------------------------------------------------
         public Logger Logger { get => mLogger; }
-        protected virtual string LogFilename { get => $"Log ^ {UDateTime.Timestamp()}.log"; }
+        protected virtual string LogPath { get => Path.Combine(Program.LOGGING_PATH, $"Log ^ {UDateTime.Timestamp()}.log"); }
         public string LogTrailingText { set => mLogTrailingText = value; get => mLogTrailingText; }
     }
 }
