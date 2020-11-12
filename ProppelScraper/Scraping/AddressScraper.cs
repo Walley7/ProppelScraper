@@ -99,7 +99,7 @@ namespace ProppelScraper.Scraping {
                     address = ScrapeAddress(id);
                     if (address == null)
                         return;
-                    if (address.status != AddressData.Status.SCRAPED || address.status == AddressData.Status.NOT_ADDRESS)
+                    if (address.status == AddressData.Status.SCRAPED || address.status == AddressData.Status.NOT_ADDRESS)
                         break;
                     else if (address.status == AddressData.Status.BLOCKED)
                         LogInfo(id, "BLOCKED BY WEBSITE");
