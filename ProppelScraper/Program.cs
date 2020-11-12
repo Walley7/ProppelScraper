@@ -71,6 +71,12 @@ namespace ProppelScraper {
             // Initialise database
             InitialiseDatabase(connectionString);
 
+            // images
+            // address_id = "pvic..."
+            // type = ["thumbnail", "image", "floorplan", "?"]
+            // index = 0+
+            // is_last = [1/0]  // Indicates whether it's the last image index so the scraper knows to stop
+
             // Tests
             /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "qld");
             AddressData address = scraper.ScrapeAddress(33276);
