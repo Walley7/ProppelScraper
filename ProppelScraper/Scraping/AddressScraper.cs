@@ -77,7 +77,8 @@ namespace ProppelScraper.Scraping {
 
                 // Already processed
                 if (AddressProcessed(status)) {
-                    LogInfo(id, $"Already processed ('{status}')");
+                    if (Program.VerboseLogging)
+                        LogInfo(id, $"Already processed ('{status}')");
                     return;
                 }
 

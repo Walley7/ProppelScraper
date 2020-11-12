@@ -94,7 +94,7 @@ namespace ProppelScraper.Scraping {
 
                 // Property section (images)
                 if (scraper.ReadToCheck("</div><a href=\"http://house.ksou.cn/house_img.php?")) {
-                    address.thumbnailURL = scraper.ReadPastAndPast("title=\"Click to view more photos\"><img src=\"", ".jpg");
+                    address.thumbnailURL = scraper.ReadPastAndShortestPastOrTo("title=\"Click to view more photos\"><img src=\"", ".jpg", "\"");
                     address.imagesURL = scraper.ReadToAndTo("http://house.ksou.cn/house_img.php?", "\" target=\"_blank\"");
                 }
 

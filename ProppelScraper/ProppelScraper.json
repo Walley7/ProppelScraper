@@ -2,7 +2,9 @@
   //"ConnectionString": "Data Source=C:/Proppel/addresses.db",
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses_test.db",
-  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping; UID=root; Password=masterkey",
+  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping_reports_vic_0_1000000; UID=root; Password=masterkey",
+
+  "VerboseLogging": false,
 
   "Mode": "reports",
   "DatabaseMode": "mysql",
@@ -18,34 +20,4 @@
   "ReportState": "vic",
   "ReportMinimumID": 0,
   "ReportMaximumID": 1000000,
-
-  "GeneratedThreads": 16,
-  "GeneratedPropertyRange": [ "vic", 0, 100000 ],
-  "GeneratedReportRange": [ "vic", 0, 1000 ],
-
-  "PropertyRanges": [
-    [ "vic", 0, 9 ],
-    [ "vic", 10, 19 ],
-    [ "vic", 20, 29 ],
-    [ "vic", 30, 39 ]
-  ],
-
-  "ReportRanges": [
-    [ "vic", 0, 50000 ],
-    [ "vic", 50000, 100000 ],
-    [ "vic", 100000, 150000 ],
-    [ "vic", 150000, 200000 ],
-    [ "vic", 200000, 250000 ],
-    [ "vic", 250000, 300000 ],
-    [ "vic", 300000, 350000 ],
-    [ "vic", 350000, 400000 ],
-    [ "vic", 400000, 450000 ],
-    [ "vic", 450000, 500000 ],
-    [ "vic", 500000, 550000 ],
-    [ "vic", 550000, 600000 ],
-    [ "vic", 600000, 650000 ],
-    [ "vic", 650000, 700000 ],
-    [ "vic", 700000, 750000 ],
-    [ "vic", 750000, 800000 ]
-  ]
 }

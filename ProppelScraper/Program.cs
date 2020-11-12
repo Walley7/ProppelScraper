@@ -31,6 +31,7 @@ namespace ProppelScraper {
 
 
         //================================================================================
+        private static bool                     sVerboseLogging;
         private static EDatabaseMode            sDatabaseMode;
         private static bool                     sRecordLookup;
 
@@ -50,17 +51,13 @@ namespace ProppelScraper {
 
             // Configuration
             string connectionString = CSA.Setting("ConnectionString");
+            sVerboseLogging = UConvert.FromString<bool>(CSA.Setting("VerboseLogging"), true);
             string mode = CSA.Setting("Mode");
             sDatabaseMode = (CSA.Setting("DatabaseMode") == "mysql" ? EDatabaseMode.MYSQL : EDatabaseMode.SQLITE);
             sRecordLookup = UConvert.FromString<bool>(CSA.Setting("RecordLookup"));
             string proxyIP = CSA.Setting("ProxyIP", false);
             string proxyUsername = CSA.Setting("ProxyUsername", false);
             string proxyPassword = CSA.Setting("ProxyPassword", false);
-            string[][] propertyRanges = CSA.Array2DSetting("PropertyRanges");
-            string[][] reportRanges = CSA.Array2DSetting("ReportRanges");
-            int generatedThreads = UConvert.FromString<int>(CSA.Setting("GeneratedThreads", false), 0);
-            string[] generatedPropertyRange = CSA.ArraySetting("GeneratedPropertyRange");
-            string[] generatedReportRange = CSA.ArraySetting("GeneratedReportRange");
             int threads = UConvert.FromString<int>(CSA.Setting("Threads", false), 0);
             string propertyState = CSA.Setting("PropertyState", false);
             int propertyMinimumID = UConvert.FromString<int>(CSA.Setting("PropertyMinimumID", false), 0);
@@ -68,12 +65,6 @@ namespace ProppelScraper {
             string reportState = CSA.Setting("ReportState", false);
             int reportMinimumID = UConvert.FromString<int>(CSA.Setting("ReportMinimumID", false), 0);
             int reportMaximumID = UConvert.FromString<int>(CSA.Setting("ReportMaximumID", false), 0);
-
-            // Generated ranges
-            if (generatedThreads > 0 && generatedPropertyRange.Length > 0)
-                propertyRanges = GenerateRanges(generatedThreads, generatedPropertyRange);
-            if (generatedThreads > 0 && generatedReportRange.Length > 0)
-                reportRanges = GenerateRanges(generatedThreads, generatedReportRange);
 
             // Initialise database
             InitialiseDatabase(connectionString);
@@ -85,7 +76,7 @@ namespace ProppelScraper {
             return;*/
 
             /*ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
-            AddressData address = scraper.ScrapeAddress(5516); // 2910325
+            AddressData address = scraper.ScrapeAddress(25541); // 25540
             Console.WriteLine(address);
             return;*/
 
@@ -111,6 +102,11 @@ namespace ProppelScraper {
             // Shutdown
             CSA.Shutdown();
         }
+
+
+        // DATABASE ================================================================================
+        //--------------------------------------------------------------------------------
+        public static bool VerboseLogging { get => sVerboseLogging; }
 
 
         // DATABASE ================================================================================
