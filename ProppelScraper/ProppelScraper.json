@@ -2,7 +2,7 @@
   //"ConnectionString": "Data Source=C:/Proppel/addresses.db",
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses_test.db",
-  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping_reports_vic_0_1000000; UID=root; Password=masterkey",
+  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping_reports_vic_3000001_4250000; UID=root; Password=masterkey",
 
   "VerboseLogging": false,
 
@@ -18,6 +18,6 @@
   "PropertyMinimumID": 0,
   "PropertyMaximumID": 1000000,
   "ReportState": "vic",
-  "ReportMinimumID": 0,
-  "ReportMaximumID": 1000000,
+  "ReportMinimumID": 3000001,
+  "ReportMaximumID": 4250000
 }

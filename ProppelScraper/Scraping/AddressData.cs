@@ -116,13 +116,13 @@ namespace ProppelScraper.Scraping {
                         "  build_year varchar(8), " +
                         "  agent varchar(256), " +
                         "  distances varchar(1024), " +
-                        "  thumbnail_url varchar(256), " +
-                        "  images_url varchar(256), " +
-                        "  neighbour_images_url varchar(256), " +
-                        "  floor_plan_url varchar(256), " +
+                        "  thumbnail_url varchar(1024), " +
+                        "  images_url varchar(1024), " +
+                        "  neighbour_images_url varchar(1024), " +
+                        "  floor_plan_url varchar(1024), " +
                         "  lot varchar(32), " +
                         "  plan_number varchar(32), " +
-                        "  property_zone_url varchar(256), " +
+                        "  property_zone_url varchar(1024), " +
                         "  estimated_lower_value varchar(32), " +
                         "  estimated_upper_value varchar(32) " +
                         ");",
