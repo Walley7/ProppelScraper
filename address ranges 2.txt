@@ -1,0 +1,28 @@
+CSILT21
+ pvic - 0-3000000
+ psa  - 0-750000
+ pwa  - 0-999999
+
+114
+ pqld - 0-999999
+
+LAPTOP
+ pnsw - 0-2000000
+
+
+RANGES
+ pvic - 3000000
+ pnsw - 3500000
+ pqld - 2100000
+ pnt  -   75000
+ psa  -  750000
+ pwa  - 1000000
+ ptas -  250000
+
+ rvic - 
+ rnsw - 
+ rqld - 
+ rnt  - 
+ rsa  - 
+ rwa  - 
+ rtas -  

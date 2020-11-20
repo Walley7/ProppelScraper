@@ -78,10 +78,10 @@ namespace ProppelScraper {
             // is_last = [1/0]  // Indicates whether it's the last image index so the scraper knows to stop
 
             // Tests
-            /*PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "qld");
-            AddressData address = scraper.ScrapeAddress(33276);
+            PropertyScraper scraper = new PropertyScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "wa");
+            AddressData address = scraper.ScrapeAddress(14);
             Console.WriteLine(address);
-            return;*/
+            return;
 
             /*ReportScraper scraper = new ReportScraper(connectionString, proxyIP, proxyUsername, proxyPassword, "vic");
             AddressData address = scraper.ScrapeAddress(572638); // 25541

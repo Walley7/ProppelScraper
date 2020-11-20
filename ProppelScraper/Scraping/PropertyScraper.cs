@@ -103,8 +103,16 @@ namespace ProppelScraper.Scraping {
 
                 // Description section
                 if (scraper.ReadToCheck("Lot/Plan No: ")) {
-                    address.lot = scraper.ReadPastAndTo("Lot/Plan No: ", "/");
-                    address.planNumber = scraper.ReadPastAndTo("/", "</div>");
+                    //address.lot = scraper.ReadPastAndTo("Lot/Plan No: ", "/");
+                    //address.planNumber = scraper.ReadPastAndTo("/", "</div>");
+                    string lotPlanNumber = scraper.ReadPastAndTo("Lot/Plan No: ", "</div>");
+                    string[] lotPlanNumberParts;
+                    if (lotPlanNumber.Contains("/"))
+                        lotPlanNumberParts = lotPlanNumber.Split("/", StringSplitOptions.RemoveEmptyEntries);
+                    else
+                        lotPlanNumberParts = lotPlanNumber.Split(" ", StringSplitOptions.RemoveEmptyEntries).Reverse().ToArray();
+                    address.lot = lotPlanNumberParts.Length > 0 ? lotPlanNumberParts[0] : "";
+                    address.planNumber = lotPlanNumberParts.Length > 1 ? lotPlanNumberParts[1] : "";
                 }
 
                 address.propertyZoneURL = scraper.ReadToAndTo("http://www.showneighbour.com/propertyzone.php?", "\" target=\"_blank\">Property's zone");

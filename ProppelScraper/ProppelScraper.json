@@ -2,7 +2,7 @@
   //"ConnectionString": "Data Source=C:/Proppel/addresses.db",
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses.db",
   //"ConnectionString": "Data Source=C:/Proppel/Data/Databases/addresses_test.db",
-  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=proppel_scraping_reports_vic_3000001_4250000; UID=root; Password=masterkey",
+  "ConnectionString": "Server=127.0.0.1; Port=3306; Database=ps_p_wa_0_999999; UID=root; Password=masterkey",
 
   "VerboseLogging": false,
 
