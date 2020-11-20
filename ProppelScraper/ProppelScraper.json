@@ -6,17 +6,17 @@
 
   "VerboseLogging": false,
 
-  "Mode": "reports",
+  "Mode": "properties",
   "DatabaseMode": "mysql",
-  "RecordLookup": true,
+  "RecordLookup": false,
   "ProxyIP": "gate.dc.smartproxy.com:20000",
   "ProxyUsername": "sp8b329f9e",
   "ProxyPassword": "masterkey",
 
   "Threads": 64,
-  "PropertyState": "sa",
+  "PropertyState": "wa",
   "PropertyMinimumID": 0,
-  "PropertyMaximumID": 1000000,
+  "PropertyMaximumID": 999999,
   "ReportState": "vic",
   "ReportMinimumID": 3000001,
   "ReportMaximumID": 4250000
